@@ -1,0 +1,56 @@
+<Window x:Class="MunicipalityApp.StatusReportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Status Report" 
+        Height="600" 
+        Width="800"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource PrimaryDarkTealBrush}"
+        Foreground="White">
+
+    <Grid Margin="30">
+        <Border CornerRadius="8" 
+                Background="White" 
+                Padding="30"
+                Effect="{StaticResource DropShadowEffect}" Height="524" VerticalAlignment="Center">
+            <StackPanel>
+                <TextBlock Text="Your Submitted Issues" 
+                         FontSize="24" 
+                         FontWeight="Bold" 
+                         Foreground="{StaticResource PrimaryDarkTealBrush}"
+                         Margin="0,0,0,20"/>
+
+                <Border BorderBrush="#EEEEEE" 
+                        BorderThickness="1" 
+                        Height="350"
+                        CornerRadius="4">
+                    <ListBox x:Name="lstIssues"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ItemContainerStyle="{StaticResource ListBoxItemStyle}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="#EEEEEE" 
+                                        BorderThickness="0,0,0,1" 
+                                        Padding="10">
+                                    <TextBlock Text="{Binding}" 
+                                               TextWrapping="Wrap"
+                                               Foreground="{StaticResource PrimaryDarkTealBrush}"/>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+
+                <Button Content="Back to Main Menu" 
+                        Style="{StaticResource PrimaryButton}"
+                        Background="Transparent"
+                        BorderBrush="{StaticResource PrimaryDarkTealBrush}"
+                        Foreground="{StaticResource PrimaryDarkTealBrush}"
+                        Margin="0,25,0,0" 
+                        Click="btnBack_Click" Height="35"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,87 @@
+<Window x:Class="MunicipalityApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Municipality Issue Reporter" 
+        Height="600" 
+        Width="1000"
+        WindowStartupLocation="CenterScreen" 
+        Background="#F5F5F5"
+        Foreground="{StaticResource PrimaryDarkTealBrush}">
+
+    <Grid>
+        <!-- Navigation Bar -->
+        <DockPanel LastChildFill="True">
+            <!-- Navigation Panel -->
+            <Border DockPanel.Dock="Top" 
+                    Background="{StaticResource PrimaryDarkTealBrush}"
+                    Height="98" Width="988">
+                <StackPanel Orientation="Horizontal" 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                    <!-- Logo -->
+                    <Image Source="SA-coat-of-arms.png"
+                           Width="132"
+                           Height="82"
+                           Margin="0,0,20,0"
+                           VerticalAlignment="Center"/>
+
+                    <!-- Navigation Buttons -->
+                    <Button Content="HOME" 
+                            Style="{StaticResource NavButtonStyle}"
+                            Click="btnHome_Click" Width="109"/>
+
+                    <Button Content="REPORT ISSUE" 
+                            Style="{StaticResource NavButtonStyle}"
+                            Click="btnReportIssues_Click" Width="168"/>
+
+                    <Button Content="ANNOUNCEMENTS" 
+                            Style="{StaticResource NavButtonStyle}"
+                            Click="btnAnnouncements_Click" Width="228"/>
+
+                    <Button Content="STATUS REPORT" 
+                            Style="{StaticResource NavButtonStyle}"
+                            Click="btnStatusReport_Click" Width="205"/>
+
+                    <!-- Exit Button now uses ExitButtonStyle -->
+                    <Button Content="EXIT" 
+                            Style="{StaticResource ExitButtonStyle}"
+                            Margin="20,0,0,0"
+                            Click="btnExit_Click" Width="62" Height="68"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Main Content Area -->
+            <Border Background="White" 
+                    Margin="20" 
+                    CornerRadius="8"
+                    Effect="{StaticResource DropShadowEffect}">
+                <Grid>
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="Welcome to"
+                                   FontSize="24"
+                                   Foreground="{StaticResource PrimaryDarkTealBrush}"
+                                   TextAlignment="Center"/>
+
+                        <TextBlock Text="Municipality Issue Reporter"
+                                   FontSize="36" 
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource AccentYellowBrush}"
+                                   TextAlignment="Center"
+                                   Margin="0,0,0,20"/>
+
+                        <TextBlock Text="South African Municipal Services"
+                                   FontSize="20"
+                                   Foreground="{StaticResource PrimaryDarkTealBrush}"
+                                   TextAlignment="Center"
+                                   Margin="0,0,0,40"/>
+
+                        <TextBlock Text="Please use the navigation bar above to get started."
+                                   FontSize="16"
+                                   Foreground="#666666"
+                                   TextAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DockPanel>
+    </Grid>
+</Window>

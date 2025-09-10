@@ -1,0 +1,17 @@
+﻿<Window x:Class="MunicipalityApp.ViewIssueWindow"
+       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="View Reported Issues" Height="400" Width="700"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="20">
+        <DataGrid x:Name="dgIssues" AutoGenerateColumns="False" CanUserAddRows="False"
+                  AlternatingRowBackground="#ECF0F1">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="*"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="2*"/>
+                <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
