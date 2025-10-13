@@ -14,6 +14,12 @@
         <SolidColorBrush x:Key="AccentYellowBrush" Color="{StaticResource AccentYellowColor}"/>
         <SolidColorBrush x:Key="NeutralWhiteBrush" Color="{StaticResource NeutralWhiteColor}"/>
         <SolidColorBrush x:Key="NeutralBlackBrush" Color="{StaticResource NeutralBlackColor}"/>
+       
+        <!-- A bright teal -->
+        <SolidColorBrush x:Key="PrimaryTealBrush" Color="#1CA9A6"/>
+
+
+
 
         <!-- Button Styles -->
         <Style x:Key="PrimaryButton" TargetType="Button">

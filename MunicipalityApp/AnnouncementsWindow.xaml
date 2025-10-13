@@ -1,38 +1,252 @@
 ﻿<Window x:Class="MunicipalityApp.AnnouncementsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Announcements" Height="400" Width="600"
+        xmlns:converters="clr-namespace:MunicipalityApp.Converters"
+        Title="📢 Announcements &amp; Local Events"
+        Height="650"
+        Width="800"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource PrimaryDarkTealBrush}"
-        Foreground="{StaticResource NeutralWhiteBrush}">
+        Foreground="{StaticResource NeutralWhiteBrush}"
+        FontFamily="Segoe UI"
+        FontSize="14">
 
-    <Grid Margin="20">
-        <StackPanel>
-            <!-- Header -->
-            <TextBlock Text="Latest Announcements" 
-                       FontSize="24" 
-                       FontWeight="Bold" 
-                       Margin="0,0,0,15"
-                       Foreground="{StaticResource AccentYellowBrush}"/>
+    <Window.Resources>
+        <!-- Converter -->
+        <converters:StringNullOrEmptyToVisibilityConverter x:Key="StringNullOrEmptyToVisibilityConverter" />
 
-            <!-- Announcements List -->
-            <ListBox Background="{StaticResource NeutralWhiteBrush}" 
-                     Foreground="{StaticResource PrimaryDarkTealBrush}" 
-                     BorderThickness="0"
-                     Padding="5">
-                <ListBoxItem Content="⚡ Planned Power Outage in Zone 3 on Friday"/>
-                <ListBoxItem Content="💧 Water Supply Maintenance – Downtown Area"/>
-                <ListBoxItem Content="🛣️ Road Repair Scheduled for Main Street"/>
-            </ListBox>
+        <!-- Watermark TextBox -->
+        <Style x:Key="WatermarkTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="{StaticResource NeutralWhiteBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource PrimaryDarkTealBrush}" />
+            <Setter Property="Padding" Value="10,4" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border CornerRadius="6" Background="{TemplateBinding Background}" />
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                          Margin="8,0,0,0"
+                                          VerticalAlignment="Center"
+                                          Background="Transparent" />
+                            <TextBlock Text="{TemplateBinding Tag}" 
+                                       Foreground="Gray" 
+                                       Margin="12,0,0,0"
+                                       VerticalAlignment="Center"
+                                       FontStyle="Italic"
+                                       IsHitTestVisible="False"
+                                       Visibility="{Binding Text,
+                                                            RelativeSource={RelativeSource TemplatedParent},
+                                                            Converter={StaticResource StringNullOrEmptyToVisibilityConverter}}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-            <!-- Back Button -->
-            <Button Content="Back to Main Menu" 
-                    Height="40" 
-                    Margin="0,15,0,0"
-                    Background="{StaticResource AccentYellowBrush}" 
-                    Foreground="{StaticResource PrimaryDarkTealBrush}" 
-                    FontWeight="Bold"
-                    Click="btnBack_Click"/>
-        </StackPanel>
+        <!-- 🔹 Modern Button -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource AccentYellowBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource PrimaryDarkTealBrush}" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="Margin" Value="5,0,0,0" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" BlurRadius="5" ShadowDepth="1" Opacity="0.25" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource NeutralWhiteBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryDarkTealBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.85" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 🔹 ListBoxItem -->
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="border" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource AccentYellowBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryDarkTealBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource AccentYellowBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryDarkTealBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="30">
+        <Border Background="{StaticResource PrimaryDarkTealBrush}"
+                CornerRadius="15"
+                Padding="25">
+            <Border.Effect>
+                <DropShadowEffect Color="#000000" BlurRadius="12" ShadowDepth="4" Opacity="0.20"/>
+            </Border.Effect>
+
+            <StackPanel>
+                <!-- Header -->
+                <TextBlock Text="Local Events &amp; Announcements"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource AccentYellowBrush}"
+                           TextAlignment="Center"
+                           Margin="0,0,0,20"
+                           TextWrapping="Wrap" />
+
+                <!-- 🔹 Search Filters -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,15" VerticalAlignment="Center">
+                    <TextBox x:Name="txtSearch"
+                             Width="300"
+                             Height="36"
+                             Tag="Search by keyword or category..."
+                             Style="{StaticResource WatermarkTextBox}"
+                             VerticalContentAlignment="Center" />
+
+                    <!-- Modern ComboBox wrapped in Border -->
+                    <Border CornerRadius="6"
+                            Background="{StaticResource NeutralWhiteBrush}"
+                            Margin="10,0,0,0"
+                            Height="36">
+                        <ComboBox x:Name="cmbLocationFilter"
+                                  Width="200"
+                                  Height="36"
+                                  Background="Transparent"
+                                  Foreground="{StaticResource PrimaryDarkTealBrush}"
+                                  FontWeight="SemiBold"
+                                  Padding="6,4"
+                                  IsEditable="False"
+                                  SelectedIndex="0"
+                                  SelectionChanged="cmbLocationFilter_SelectionChanged"/>
+                    </Border>
+
+                    <Button Content="Search"
+                            Width="100"
+                            Height="36"
+                            Style="{StaticResource ModernButton}"
+                            Margin="10,0,0,0"
+                            Click="btnSearch_Click" />
+                </StackPanel>
+
+                <!-- Announcements ListBox -->
+                <TextBlock Text="Current Announcements:"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           Margin="0,5,0,5"/>
+                <ListBox x:Name="lstAnnouncements"
+                         Height="220"
+                         Padding="8"
+                         BorderThickness="0"
+                         Background="{StaticResource NeutralWhiteBrush}"
+                         Foreground="{StaticResource PrimaryDarkTealBrush}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border CornerRadius="6" Padding="6" Margin="2" Background="#FFF7F7F7">
+                                <StackPanel>
+                                    <!-- Event Title -->
+                                    <TextBlock Text="{Binding Title}"
+                                               FontWeight="Bold"
+                                               FontSize="14"
+                                               Foreground="{StaticResource PrimaryDarkTealBrush}"
+                                               TextWrapping="Wrap" />
+
+                                    <!-- Event Location -->
+                                    <TextBlock Text="{Binding Location}"
+                                               FontStyle="Italic"
+                                               FontSize="12"
+                                               Foreground="#FF555555"
+                                               Margin="0,2,0,0" />
+
+                                    <!-- Event Date -->
+                                    <TextBlock Text="{Binding Date, StringFormat=d}"
+                                               FontSize="12"
+                                               Foreground="#FF555555"
+                                               Margin="0,2,0,0" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <!-- Recommendations ListBox -->
+                <TextBlock Text="Recommended for You:"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           Margin="0,20,0,5" />
+                <ListBox x:Name="lstRecommendations"
+                         Height="150"
+                         Padding="8"
+                         BorderThickness="0"
+                         Background="{StaticResource NeutralWhiteBrush}"
+                         Foreground="{StaticResource PrimaryDarkTealBrush}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border CornerRadius="6" Padding="6" Margin="2" Background="#FFF7F7F7">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Title}"
+                                               FontWeight="Bold"
+                                               FontSize="14"
+                                               Foreground="{StaticResource PrimaryDarkTealBrush}"
+                                               TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding Location}"
+                                               FontStyle="Italic"
+                                               FontSize="12"
+                                               Foreground="#FF555555"
+                                               Margin="0,2,0,0" />
+                                    <TextBlock Text="{Binding Date, StringFormat=d}"
+                                               FontSize="12"
+                                               Foreground="#FF555555"
+                                               Margin="0,2,0,0" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <!-- Back Button -->
+                <Button Content="⬅ Back to Main Menu"
+                        Height="45"
+                        Width="200"
+                        HorizontalAlignment="Center"
+                        Margin="0,25,0,0"
+                        Style="{StaticResource ModernButton}"
+                        Click="btnBack_Click" />
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>
