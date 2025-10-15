@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -11,6 +11,11 @@ namespace MunicipalityApp
 {
     public partial class AnnouncementsWindow : Window
     {
+        /*
+         * Manages municipal announcements and recommendations.
+         * Provides search, location filtering, and prioritized suggestions
+         * for upcoming events/issues.
+         */
         private SortedDictionary<DateTime, List<Event>> eventsByDate = new();
         private HashSet<string> categories = new();
         private HashSet<string> locations = new(); //  Store all locations
@@ -19,6 +24,9 @@ namespace MunicipalityApp
         private List<string> searchHistory = new();
         private PriorityQueue<Event, int> priorityEvents = new();
 
+        /// <summary>
+        /// Initializes the window, loads sample data, sets up filters and UI event handlers.
+        /// </summary>
         public AnnouncementsWindow()
         {
             InitializeComponent();
@@ -31,8 +39,14 @@ namespace MunicipalityApp
 
             // Hook up ComboBox selection changed
             cmbLocationFilter.SelectionChanged += cmbLocationFilter_SelectionChanged;
+
+            // Track recently viewed announcements
+            lstAnnouncements.SelectionChanged += lstAnnouncements_SelectionChanged;
         }
 
+        /// <summary>
+        /// Generates sample events using Bogus and loads them into in-memory data structures.
+        /// </summary>
         private void LoadSampleEvents() // Generate sample events using Bogus
         {
             var categoriesList = new[] // Categories of municipal issues
@@ -75,12 +89,17 @@ namespace MunicipalityApp
                 eventsByDate[ev.Date.Date].Add(ev);
                 categories.Add(ev.Category);
                 locations.Add(ev.Location);
-                upcomingEvents.Enqueue(ev);
                 priorityEvents.Enqueue(ev, ev.Priority);
             }
+
+            // Build the upcoming events queue in chronological order
+            RebuildUpcomingQueue();
         }
 
         // Populate ComboBox with all locations
+        /// <summary>
+        /// Populates the location ComboBox with all unique locations and selects the default option.
+        /// </summary>
         private void PopulateLocationFilter()
         {
             cmbLocationFilter.Items.Clear();
@@ -90,36 +109,57 @@ namespace MunicipalityApp
             cmbLocationFilter.SelectedIndex = 0; // Default selection
         }
 
+        /// <summary>
+        /// Displays the provided events in the announcements list. If null, displays all events.
+        /// </summary>
         private void DisplayEvents(IEnumerable<Event>? events = null)
         {
             lstAnnouncements.Items.Clear();
 
-            var items = events ?? eventsByDate.SelectMany(e => e.Value);
+            // Use the SortedDictionary order to iterate by ascending date
+            var items = events ?? eventsByDate
+                .Where(kvp => kvp.Key >= DateTime.Today)
+                .SelectMany(kvp => kvp.Value);
 
             foreach (var ev in items.OrderBy(e => e.Date))
             {
                 lstAnnouncements.Items.Add(ev);
             }
+
+            // Keep the upcoming events queue in sync with all events
+            RebuildUpcomingQueue();
         }
 
         // Live search
+        /// <summary>
+        /// Triggers a search when the user types in the search box.
+        /// </summary>
         private void TxtSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             RunSearch(txtSearch.Text.Trim());
         }
 
         // Search button click
+        /// <summary>
+        /// Executes a search when the Search button is clicked.
+        /// </summary>
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             RunSearch(txtSearch.Text.Trim());
         }
 
         // Filter by query and selected location
+        /// <summary>
+        /// Filters events by the query and selected location, updates the display, and shows recommendations.
+        /// </summary>
         private void RunSearch(string query)
         {
             var selectedLocation = cmbLocationFilter.SelectedItem?.ToString();
 
-            var allEvents = eventsByDate.SelectMany(ev => ev.Value);
+            // Flatten events using the natural sort order of the SortedDictionary
+            var allEvents = eventsByDate
+                .Where(kvp => kvp.Key >= DateTime.Today)
+                .SelectMany(ev => ev.Value);
 
             // Apply search filter
             var results = allEvents.Where(ev =>
@@ -145,11 +185,18 @@ namespace MunicipalityApp
         }
 
         // Handle ComboBox location change
+        /// <summary>
+        /// Re-runs the search when the selected location changes.
+        /// </summary>
         private void cmbLocationFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             RunSearch(txtSearch.Text.Trim());
         }
 
+        /// <summary>
+        /// Builds and displays prioritized recommendations based on the query, search history,
+        /// and event priority, excluding items already viewed.
+        /// </summary>
         private void ShowRecommendations(string query)
         {
             // Clear previous recommendations
@@ -166,10 +213,10 @@ namespace MunicipalityApp
                 .GroupBy(cat => cat)
                 .OrderByDescending(g => g.Count())
                 .Select(g => g.Key)
-                .ToList();
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
             // Build recommendations
-            var recommendations = allEvents
+            var filtered = allEvents
                 .Where(ev =>
                     // Do not recommend events already viewed
                     !recentlyViewed.Contains(ev) &&
@@ -181,12 +228,26 @@ namespace MunicipalityApp
                     (ev.Category.Contains(query, StringComparison.OrdinalIgnoreCase) ||
                      ev.Location.Contains(query, StringComparison.OrdinalIgnoreCase) ||
                      preferredCategories.Contains(ev.Category))
-                )
-                // Sort by priority first, then by upcoming date
+                );
+
+            // Use a temporary PriorityQueue to pick top-priority items efficiently (higher Priority first)
+            var tempQueue = new PriorityQueue<Event, int>();
+            foreach (var ev in filtered)
+            {
+                // Negate priority to convert default min-heap into max-priority (5 highest)
+                tempQueue.Enqueue(ev, -ev.Priority);
+            }
+
+            var top = new List<Event>(capacity: 5);
+            while (top.Count < 5 && tempQueue.Count > 0)
+            {
+                top.Add(tempQueue.Dequeue());
+            }
+
+            // Order the selected top items by date for display consistency
+            var recommendations = top
                 .OrderByDescending(ev => ev.Priority)
                 .ThenBy(ev => ev.Date)
-                // Limit the number of recommendations to 5 
-                .Take(5)
                 .ToList();
 
             // Populate the ListBox with display 
@@ -201,7 +262,32 @@ namespace MunicipalityApp
             }
         }
 
+        private void lstAnnouncements_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lstAnnouncements.SelectedItem is Event ev)
+            {
+                // Push the selected event onto the recently viewed stack
+                recentlyViewed.Push(ev);
+            }
+        }
+
+        private void RebuildUpcomingQueue()
+        {
+            // Rebuild the queue with events in chronological order from the SortedDictionary
+            upcomingEvents.Clear();
+            foreach (var kvp in eventsByDate)
+            {
+                foreach (var ev in kvp.Value.OrderBy(e => e.Date))
+                {
+                    upcomingEvents.Enqueue(ev);
+                }
+            }
+        }
+
         // Back button click event handler
+        /// <summary>
+        /// Navigates back to the main window and closes the current window.
+        /// </summary>
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
             // Open the main window
