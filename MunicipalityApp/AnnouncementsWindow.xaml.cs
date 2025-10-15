@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -11,14 +11,21 @@ namespace MunicipalityApp
 {
     public partial class AnnouncementsWindow : Window
     {
-        private SortedDictionary<DateTime, List<Event>> eventsByDate = new();
-        private HashSet<string> categories = new();
-        private HashSet<string> locations = new(); //  Store all locations
-        private Queue<Event> upcomingEvents = new();
-        private Stack<Event> recentlyViewed = new();
-        private List<string> searchHistory = new();
-        private PriorityQueue<Event, int> priorityEvents = new();
+        /*
+         * Manages municipal announcements and recommendations.
+         * Provides location filtering, and prioritized suggestions.
+         */
+        private SortedDictionary<DateTime, List<Event>> eventsByDate = new(); // Sorted by date for chronological operations
+        private HashSet<string> categories = new(); // Unique set of categories
+        private HashSet<string> locations = new(); // Unique set of locations
+        private Queue<Event> upcomingEvents = new(); // FIFO of upcoming events (populated during load)
+        private Stack<Event> recentlyViewed = new(); // LIFO of user interactions for exclusion in recommendations
+        private List<string> searchHistory = new(); // Raw search terms history
+        private PriorityQueue<Event, int> priorityEvents = new(); // Global queue of events by priority
 
+        /// <summary>
+        /// Initializes the window, loads sample data, prepares filters, and wires UI events.
+        /// </summary>
         public AnnouncementsWindow()
         {
             InitializeComponent();
@@ -33,6 +40,9 @@ namespace MunicipalityApp
             cmbLocationFilter.SelectionChanged += cmbLocationFilter_SelectionChanged;
         }
 
+        /// <summary>
+        /// Generates sample events using Bogus and stores them across the in-memory structures.
+        /// </summary>
         private void LoadSampleEvents() // Generate sample events using Bogus
         {
             var categoriesList = new[] // Categories of municipal issues
@@ -75,12 +85,15 @@ namespace MunicipalityApp
                 eventsByDate[ev.Date.Date].Add(ev);
                 categories.Add(ev.Category);
                 locations.Add(ev.Location);
-                upcomingEvents.Enqueue(ev);
+                upcomingEvents.Enqueue(ev); // seed queue; can be rebuilt from eventsByDate if needed
                 priorityEvents.Enqueue(ev, ev.Priority);
             }
         }
 
         // Populate ComboBox with all locations
+        /// <summary>
+        /// Populates the location filter with unique locations and selects the default option.
+        /// </summary>
         private void PopulateLocationFilter()
         {
             cmbLocationFilter.Items.Clear();
@@ -90,6 +103,9 @@ namespace MunicipalityApp
             cmbLocationFilter.SelectedIndex = 0; // Default selection
         }
 
+        /// <summary>
+        /// Displays the provided events, or all events when null. Results are ordered by date.
+        /// </summary>
         private void DisplayEvents(IEnumerable<Event>? events = null)
         {
             lstAnnouncements.Items.Clear();
@@ -103,18 +119,27 @@ namespace MunicipalityApp
         }
 
         // Live search
+        /// <summary>
+        /// Performs live search as the user types.
+        /// </summary>
         private void TxtSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             RunSearch(txtSearch.Text.Trim());
         }
 
         // Search button click
+        /// <summary>
+        /// Triggers a search using the current query.
+        /// </summary>
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             RunSearch(txtSearch.Text.Trim());
         }
 
         // Filter by query and selected location
+        /// <summary>
+        /// Applies text and location filters, updates the results, and records search history.
+        /// </summary>
         private void RunSearch(string query)
         {
             var selectedLocation = cmbLocationFilter.SelectedItem?.ToString();
@@ -145,11 +170,18 @@ namespace MunicipalityApp
         }
 
         // Handle ComboBox location change
+        /// <summary>
+        /// Re-runs the search whenever the selected location changes.
+        /// </summary>
         private void cmbLocationFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             RunSearch(txtSearch.Text.Trim());
         }
 
+        /// <summary>
+        /// Builds and displays recommendations using search history (for preferred categories),
+        /// excludes recently viewed items using a Stack, and orders by priority then date.
+        /// </summary>
         private void ShowRecommendations(string query)
         {
             // Clear previous recommendations
@@ -166,7 +198,7 @@ namespace MunicipalityApp
                 .GroupBy(cat => cat)
                 .OrderByDescending(g => g.Count())
                 .Select(g => g.Key)
-                .ToList();
+                .ToList(); // Note: could be a HashSet for O(1) Contains during filtering
 
             // Build recommendations
             var recommendations = allEvents
@@ -202,6 +234,9 @@ namespace MunicipalityApp
         }
 
         // Back button click event handler
+        /// <summary>
+        /// Navigates back to the main window and closes this window.
+        /// </summary>
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
             // Open the main window
