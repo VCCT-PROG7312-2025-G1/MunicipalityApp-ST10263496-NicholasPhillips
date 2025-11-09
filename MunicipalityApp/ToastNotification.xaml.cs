@@ -15,9 +15,8 @@ using System.Windows.Threading;
 
 namespace MunicipalityApp
 {
-    /// <summary>
-    /// Window for displaying a temporary toast notification message.
-    /// </summary>
+
+    // Window for displaying a temporary toast notification message.
     public partial class ToastNotification : Window
     {
         // Constructor: Initializes the toast notification with a message

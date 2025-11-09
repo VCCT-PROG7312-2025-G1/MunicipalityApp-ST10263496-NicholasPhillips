@@ -20,6 +20,16 @@
                          Foreground="{StaticResource PrimaryDarkTealBrush}"
                          Margin="0,0,0,20"/>
 
+                <!-- Search and Actions: GUID search (BST lookup) + rebuild indexes (BST/AVL/RBT/Heap/Graph) -->
+                <DockPanel Margin="0,0,0,12">
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                        <TextBlock Text="Search by ID:" VerticalAlignment="Center" Foreground="{StaticResource PrimaryDarkTealBrush}"/>
+                        <TextBox x:Name="txtSearchId" Width="320" Margin="8,0,0,0"/>
+                        <Button Content="Find" Style="{StaticResource PrimaryButton}" Width="80" Margin="10,0,0,0" Click="btnFind_Click"/>
+                    </StackPanel>
+                    <Button Content="Refresh Indexes" Style="{StaticResource PrimaryButton}" Width="140" HorizontalAlignment="Right" Click="btnRefresh_Click"/>
+                </DockPanel>
+
                 <Border BorderBrush="#EEEEEE" 
                         BorderThickness="1" 
                         Height="350"
@@ -31,12 +41,36 @@
                              ItemContainerStyle="{StaticResource ListBoxItemStyle}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Border BorderBrush="#EEEEEE" 
-                                        BorderThickness="0,0,0,1" 
-                                        Padding="10">
-                                    <TextBlock Text="{Binding}" 
-                                               TextWrapping="Wrap"
-                                               Foreground="{StaticResource PrimaryDarkTealBrush}"/>
+                                <Border BorderBrush="#EEEEEE" BorderThickness="0,0,0,1" Padding="10">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="220"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Main details -->
+                                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,4">
+                                            <TextBlock Text="{Binding Title}" FontWeight="Bold" Foreground="{StaticResource PrimaryDarkTealBrush}"/>
+                                            <!-- Show the unique service request ID to enable cross-window tracking and search -->
+                                            <TextBlock Text="{Binding Id}" FontSize="12" Foreground="#888"/>
+                                            <TextBlock Text="{Binding Category}" FontSize="12" Foreground="#666"/>
+                                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Foreground="#333"/>
+                                        </StackPanel>
+
+                                        <!-- Status and progress -->
+                                        <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch">
+                                            <!-- Current workflow status -->
+                                            <TextBlock Text="{Binding Status}" HorizontalAlignment="Right" FontWeight="Bold" Foreground="{StaticResource PrimaryDarkTealBrush}"/>
+                                            <TextBlock Text="{Binding ReportedDate, StringFormat=Reported: {0:g}}" HorizontalAlignment="Right" Foreground="#666"/>
+                                            <!-- Progress bar reflects the percentage completion (0-100) -->
+                                            <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}" Height="10" Margin="0,8,0,0"/>
+                                            <TextBlock Text="{Binding Progress, StringFormat=Progress: {0}%}" HorizontalAlignment="Right" FontSize="12" Foreground="#666"/>
+                                        </StackPanel>
+                                    </Grid>
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

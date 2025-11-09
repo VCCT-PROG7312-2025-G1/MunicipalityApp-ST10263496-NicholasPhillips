@@ -5,10 +5,8 @@ using System.Collections;
 
 namespace MunicipalityApp.Data
 {
-    /// <summary>
-    /// Provides thread-safe storage and management for user-reported issues.
-    /// Maintains multiple collections for different access patterns (insertion order, recent, processing).
-    /// </summary>
+
+    // Provides thread-safe storage and management for user-reported issues.
     public static class IssueRepository
     {
         // LinkedList to maintain insertion order while allowing O(1) insertions/deletions.
@@ -23,9 +21,8 @@ namespace MunicipalityApp.Data
         // Queue for processing issues (FIFO order).
         private static readonly Queue<UserIssue> _processingQueue = new Queue<UserIssue>();
 
-        /// <summary>
-        /// Gets a thread-safe snapshot of all issues in insertion order.
-        /// </summary>
+
+        // Gets a thread-safe snapshot of all issues in insertion order.
         public static IEnumerable<UserIssue> Issues 
         { 
             get 
@@ -37,9 +34,8 @@ namespace MunicipalityApp.Data
             } 
         }
         
-        /// <summary>
-        /// Gets a thread-safe snapshot of recently added issues (most recent first).
-        /// </summary>
+
+        // Gets a thread-safe snapshot of recently added issues (most recent first).
         public static IEnumerable<UserIssue> RecentIssues
         {
             get
@@ -51,10 +47,8 @@ namespace MunicipalityApp.Data
             }
         }
 
-        /// <summary>
-        /// Adds a new issue to all internal collections.
-        /// </summary>
-        /// <param name="issue">The issue to add.</param>
+
+        // Adds a new issue to all internal collections.
         public static void AddIssue(UserIssue issue)
         {
             lock (_lock)
@@ -65,11 +59,8 @@ namespace MunicipalityApp.Data
             }
         }
 
-        /// <summary>
-        /// Attempts to get the next issue for processing in FIFO order.
-        /// </summary>
-        /// <param name="issue">The next issue, if available.</param>
-        /// <returns>True if an issue was dequeued; otherwise, false.</returns>
+
+        // Attempts to get the next issue for processing in FIFO order.
         public static bool TryGetNextIssue(out UserIssue issue)
         {
             lock (_lock)
@@ -84,10 +75,7 @@ namespace MunicipalityApp.Data
             }
         }
         
-        /// <summary>
-        /// Gets issues in reverse chronological order (newest first).
-        /// </summary>
-        /// <returns>An enumerable of issues, newest first.</returns>
+        // Gets issues in reverse chronological order (newest first).
         public static IEnumerable<UserIssue> GetIssuesNewestFirst()
         {
             lock (_lock)

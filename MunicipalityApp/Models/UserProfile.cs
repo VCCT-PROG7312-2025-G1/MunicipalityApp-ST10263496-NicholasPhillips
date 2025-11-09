@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,19 +6,21 @@ using System.Threading.Tasks;
 
 namespace MunicipalityApp.Models
 {
-    // Represents a user's profile in the municipality application
+
+    // Represents a user's profile
     public class UserProfile
     {
-        // The user's display name
+
+        // The user's display name.
         public string UserName { get; set; }
 
-        // The user's location or area
+        // The user's location or area.
         public string Location { get; set; }
-
-        // The user's accumulated points (used for badges and rewards)
+        
+        // Accumulated points (used for badges and rewards).
         public int Points { get; set; } = 0;
 
-        // The badge earned by the user based on their points
+        // The badge earned by the user based on their current point total.
         public string Badge 
         {
             get
@@ -29,8 +31,7 @@ namespace MunicipalityApp.Models
                 return "Newcomer";
             }
         }
-
-        // Adds the specified amount of points to the user's total
+        // Adds the specified amount of points to the user's total.
         public void AddPoints(int amount)
         {
             Points += amount;

@@ -1,36 +1,33 @@
-﻿namespace MunicipalityApp.Models
+namespace MunicipalityApp.Models
 {
-    /// <summary>
-    /// Represents a user-submitted issue report in the municipality system.
-    /// Contains details such as title, category, description, attached media, and status.
-    /// </summary>
+    // User-submitted issue report in the municipality system.
+
+
     public class UserIssue
     {
-        /// <summary>
-        /// The title or short summary of the reported issue.
-        /// </summary>
+        // Unique identifier assigned to the service request upon creation.
+        public Guid Id { get; set; } = Guid.NewGuid();
+
+        // The title or short summary of the reported issue.
         public string Title { get; set; }
 
-        /// <summary>
-        /// The category of the issue (e.g., Electricity, Water, Roads, Waste).
-        /// </summary>
+        // The category of the issue
         public string Category { get; set; }
 
-        /// <summary>
-        /// A detailed description of the issue provided by the user.
-        /// </summary>
+
+        // A detailed description of the issue provided by the user.
         public string Description { get; set; }
 
-        /// <summary>
-        /// The file path of any media (image, video, etc.) attached to the report.
-        /// </summary>
+
+        // The file path of any media (image, video) attached to the report.
         public string FilePath { get; set; }
 
         public DateTime ReportedDate { get; set; } = DateTime.Now;
-        /// <summary>
-        /// The current status of the issue (e.g., Pending, Resolved).
-        /// Defaults to "Pending" when a new issue is created.
-        /// </summary>
+
+        // The current status of the issue
         public string Status { get; set; } = "Pending"; // Default status
+
+        // Progress percentage of the request
+        public int Progress { get; set; } = 0;
     }
 }

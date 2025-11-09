@@ -1,4 +1,4 @@
-﻿using MunicipalityApp.Models;
+using MunicipalityApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace MunicipalityApp.Data
 {
-    // Repository class for managing the current user's profile
+
+    // Repository for managing the current user's profile across the application lifetime.
     class UserRepository
     {
-        // Stores the profile of the currently logged-in user
-        // Accessible throughout the application as a static property
+
+        // The profile of the currently logged-in user, available application-wide.
         public static UserProfile CurrentUser { get; set; } = new UserProfile();
     }
 }

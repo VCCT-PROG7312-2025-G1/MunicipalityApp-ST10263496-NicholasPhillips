@@ -2,24 +2,22 @@ using System.Windows;
 
 namespace MunicipalityApp
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.
-    /// Serves as the main menu for the MunicipalityApp, allowing navigation to other windows.
-    /// </summary>
+
+    // Interaction logic for MainWindow.
+    // Serves as the main menu for the MunicipalityApp, allowing navigation to other windows.
+
     public partial class MainWindow : Window
     {
-        /// <summary>
-        /// Initializes the MainWindow and its components.
-        /// </summary>
+
+        // Initializes the MainWindow and its components.
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Handles the Report Issues button click event.
-        /// Opens the ReportIssueWindow and hides the main window.
-        /// </summary>
+        // Handles the Report Issues button click event.
+        // Opens the ReportIssueWindow and hides the main window.
+
         private void btnReportIssues_Click(object sender, RoutedEventArgs e)
         {
             ReportIssueWindow reportWindow = new ReportIssueWindow();
@@ -30,10 +28,9 @@ namespace MunicipalityApp
             toast.Show();
         }
 
-        /// <summary>
-        /// Handles the Announcements button click event.
-        /// Opens the AnnouncementsWindow and hides the main window.
-        /// </summary>
+
+        // Handles the Announcements button click event.
+        // Opens the AnnouncementsWindow and hides the main window.
         private void btnAnnouncements_Click(object sender, RoutedEventArgs e)
         {
             AnnouncementsWindow announcementsWindow = new AnnouncementsWindow();
@@ -44,10 +41,10 @@ namespace MunicipalityApp
             toast.Show();
         }
 
-        /// <summary>
-        /// Handles the Status Report button click event.
-        /// Opens the StatusReportWindow and hides the main window.
-        /// </summary>
+
+        // Handles the Status Report button click event.
+        // Opens the StatusReportWindow and hides the main window.
+
         private void btnStatusReport_Click(object sender, RoutedEventArgs e)
         {
             StatusReportWindow statusWindow = new StatusReportWindow();
@@ -58,10 +55,10 @@ namespace MunicipalityApp
             toast.Show();
         }
 
-        /// <summary>
-        /// Handles the Home button click event.
-        /// No action needed, already on the home page.
-        /// </summary>
+
+        // Handles the Home button click event.
+        // No action needed, already on the home page.
+
         private void btnHome_Click(object sender, RoutedEventArgs e)
         {
             // Already on the home page, no action needed
@@ -69,10 +66,9 @@ namespace MunicipalityApp
             toast.Show();
         }
 
-        /// <summary>
-        /// Handles the Exit button click event.
-        /// Shuts down the application.
-        /// </summary>
+
+        // Handles the Exit button click event.
+        // Shuts down the application.
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();

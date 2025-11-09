@@ -9,18 +9,17 @@ using System.Windows.Media.Animation;
 
 namespace MunicipalityApp
 {
-    /// <summary>
-    /// Interaction logic for ReportIssueWindow.
-    /// Allows users to report municipal issues, attach media, and submit reports.
-    /// </summary>
+
+    // Interaction logic for ReportIssueWindow.
+    // Allows users to report municipal issues, attach media, and submit reports.
+
     public partial class ReportIssueWindow : Window
     {
         // Stores the file path of the attached media.
         private string attachedFilePath = "";
 
-        /// <summary>
-        /// Initializes the window and sets up event handlers for progress tracking.
-        /// </summary>
+
+        // Initializes the window and sets up event handlers for progress tracking.
         public ReportIssueWindow()
         {
             InitializeComponent();
@@ -31,10 +30,9 @@ namespace MunicipalityApp
             cmbCategory.SelectionChanged += (s, e) => UpdateProgressBar();
         }
 
-        /// <summary>
-        /// Updates the progress bar based on completed input fields.
-        /// Animates the progress and changes color according to completion.
-        /// </summary>
+
+        // Updates the progress bar based on completed input fields.
+        // Animates the progress and changes color according to completion.
         private void UpdateProgressBar()
         {
             double progress = 0;
@@ -73,10 +71,10 @@ namespace MunicipalityApp
             }
         }
 
-        /// <summary>
-        /// Handles the Attach Media button click event.
-        /// Opens a file dialog for the user to select a file and updates the UI.
-        /// </summary>
+
+        // Handles the Attach Media button click event.
+        // Opens a file dialog for the user to select a file and updates the UI.
+
         private void btnAttachMedia_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
@@ -89,10 +87,10 @@ namespace MunicipalityApp
             }
         }
 
-        /// <summary>
-        /// Handles the Submit Report button click event.
-        /// Validates input, creates a new issue, saves it, awards points, and resets the form.
-        /// </summary>
+
+        // Handles the Submit Report button click event.
+        // Validates input, creates a new issue, saves it, awards points, and resets the form.
+
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
             // Declare a single toast variable for the method.
@@ -125,6 +123,7 @@ namespace MunicipalityApp
             // Show success toast notification
             toast = new ToastNotification(
                 $"Issue submitted successfully! 🎉\n" +
+                $"Request ID: {issue.Id}\n" +
                 $"You now have {UserRepository.CurrentUser.Points} points.\n" +
                 $"Your badge: {UserRepository.CurrentUser.Badge}"
             );
@@ -139,10 +138,9 @@ namespace MunicipalityApp
             UpdateProgressBar(); // reset progress
         }
 
-        /// <summary>
-        /// Handles the Back button click event.
-        /// Returns to the main window and closes the current window.
-        /// </summary>
+
+        // Handles the Back button click event.
+        // Returns to the main window and closes the current window.
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
             MainWindow main = new MainWindow();
