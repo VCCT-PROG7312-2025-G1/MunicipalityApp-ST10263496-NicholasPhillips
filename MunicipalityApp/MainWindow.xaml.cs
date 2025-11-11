@@ -13,6 +13,9 @@ namespace MunicipalityApp
         public MainWindow()
         {
             InitializeComponent();
+            // Register this instance with the global navigation manager so other windows
+            // can return to the same MainWindow instance instead of creating new ones.
+            MunicipalityApp.Services.NavigationManager.RegisterMainWindow(this);
         }
 
         // Handles the Report Issues button click event.
@@ -20,10 +23,8 @@ namespace MunicipalityApp
 
         private void btnReportIssues_Click(object sender, RoutedEventArgs e)
         {
-            ReportIssueWindow reportWindow = new ReportIssueWindow();
-            reportWindow.Show();
-            this.Hide();
-            
+            // Navigate the main Frame to the ReportIssuePage
+            MainFrame.Navigate(new Pages.ReportIssuePage());
             var toast = new ToastNotification("Opening Report Issue form...");
             toast.Show();
         }
@@ -33,10 +34,7 @@ namespace MunicipalityApp
         // Opens the AnnouncementsWindow and hides the main window.
         private void btnAnnouncements_Click(object sender, RoutedEventArgs e)
         {
-            AnnouncementsWindow announcementsWindow = new AnnouncementsWindow();
-            announcementsWindow.Show();
-            this.Hide();
-            
+            MainFrame.Navigate(new Pages.AnnouncementsPage());
             var toast = new ToastNotification("Opening Announcements...");
             toast.Show();
         }
@@ -47,10 +45,7 @@ namespace MunicipalityApp
 
         private void btnStatusReport_Click(object sender, RoutedEventArgs e)
         {
-            StatusReportWindow statusWindow = new StatusReportWindow();
-            statusWindow.Show();
-            this.Hide();
-            
+            MainFrame.Navigate(new Pages.StatusReportPage());
             var toast = new ToastNotification("Opening Status Report...");
             toast.Show();
         }
@@ -61,7 +56,8 @@ namespace MunicipalityApp
 
         private void btnHome_Click(object sender, RoutedEventArgs e)
         {
-            // Already on the home page, no action needed
+            // Navigate back to the internal home page
+            MainFrame.Navigate(new Pages.MainHomePage());
             var toast = new ToastNotification("You're already on the home page");
             toast.Show();
         }

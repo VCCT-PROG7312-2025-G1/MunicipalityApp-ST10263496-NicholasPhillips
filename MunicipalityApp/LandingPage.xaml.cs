@@ -26,15 +26,11 @@ namespace MunicipalityApp
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
             };
 
-            fadeOut.Completed += async (s, _) =>
+            fadeOut.Completed += (s, _) =>
             {
-                // Open Main Window
-                var main = new MainWindow();
-                
-                // Ensure the window is shown before activating it
-                main.Show();
-                main.Activate();
-                
+                // Show or create the registered MainWindow via NavigationManager
+                MunicipalityApp.Services.NavigationManager.ShowMainWindow();
+
                 // Close splash screen
                 this.Close();
             };

@@ -11,11 +11,11 @@ namespace MunicipalityApp.Models
     public class UserProfile
     {
 
-        // The user's display name.
-        public string UserName { get; set; }
+    // The user's display name.
+    public string UserName { get; set; } = string.Empty;
 
-        // The user's location or area.
-        public string Location { get; set; }
+    // The user's location or area.
+    public string Location { get; set; } = string.Empty;
         
         // Accumulated points (used for badges and rewards).
         public int Points { get; set; } = 0;

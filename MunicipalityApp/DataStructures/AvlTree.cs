@@ -12,13 +12,13 @@ namespace MunicipalityApp.DataStructures
         {
             public TKey Key;
             public TValue Value;
-            public Node Left;
-            public Node Right;
+            public Node? Left;
+            public Node? Right;
             public int Height = 1;
             public Node(TKey key, TValue value) { Key = key; Value = value; }
         }
 
-        public Node Root { get; private set; }
+        public Node? Root { get; private set; }
 
         // Inserts or updates a value by key, rebalancing as needed.
         public void Insert(TKey key, TValue value)
@@ -26,7 +26,7 @@ namespace MunicipalityApp.DataStructures
             Root = Insert(Root, key, value);
         }
 
-        private Node Insert(Node node, TKey key, TValue value)
+        private Node Insert(Node? node, TKey key, TValue value)
         {
             if (node == null) return new Node(key, value);
             int cmp = key.CompareTo(node.Key);
@@ -65,29 +65,29 @@ namespace MunicipalityApp.DataStructures
             }
         }
 
-        private static int HeightOf(Node n) => n?.Height ?? 0;
-        private static void UpdateHeight(Node n) => n.Height = Math.Max(HeightOf(n.Left), HeightOf(n.Right)) + 1;
-        private static int Balance(Node n) => HeightOf(n.Left) - HeightOf(n.Right);
+    private static int HeightOf(Node? n) => n?.Height ?? 0;
+    private static void UpdateHeight(Node n) => n.Height = Math.Max(HeightOf(n.Left), HeightOf(n.Right)) + 1;
+    private static int Balance(Node? n) => HeightOf(n?.Left) - HeightOf(n?.Right);
 
         private static Node RotateRight(Node y)
         {
-            var x = y.Left; var T2 = x.Right; x.Right = y; y.Left = T2; UpdateHeight(y); UpdateHeight(x); return x;
+            var x = y.Left!; var T2 = x.Right; x.Right = y; y.Left = T2; UpdateHeight(y); UpdateHeight(x); return x;
         }
         private static Node RotateLeft(Node x)
         {
-            var y = x.Right; var T2 = y.Left; y.Left = x; x.Right = T2; UpdateHeight(x); UpdateHeight(y); return y;
+            var y = x.Right!; var T2 = y.Left; y.Left = x; x.Right = T2; UpdateHeight(x); UpdateHeight(y); return y;
         }
         private static Node Rebalance(Node n)
         {
             int bal = Balance(n);
             if (bal > 1)
             {
-                if (Balance(n.Left) < 0) n.Left = RotateLeft(n.Left);
+                if (Balance(n.Left) < 0) n.Left = RotateLeft(n.Left!);
                 return RotateRight(n);
             }
             if (bal < -1)
             {
-                if (Balance(n.Right) > 0) n.Right = RotateRight(n.Right);
+                if (Balance(n.Right) > 0) n.Right = RotateRight(n.Right!);
                 return RotateLeft(n);
             }
             return n;

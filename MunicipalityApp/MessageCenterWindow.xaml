@@ -1,13 +1,16 @@
-﻿<Window x:Class="MunicipalityApp.MessageCenterWindow"
+<Window x:Class="MunicipalityApp.MessageCenterWindow"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Message Center" Height="300" Width="500"
-        WindowStartupLocation="CenterScreen">
-    <Grid Margin="20">
-        <StackPanel>
-            <TextBlock Text="In-App Messages" FontSize="18" FontWeight="Bold"
-                       Margin="0,0,0,20"/>
-            <ListBox x:Name="lstMessages" Height="200"/>
-        </StackPanel>
+        Title="Message Center" Height="360" Width="560"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource PrimaryDarkTealBrush}"
+        Foreground="{StaticResource NeutralWhiteBrush}">
+    <Grid Margin="24">
+        <Border Style="{StaticResource Card}">
+            <StackPanel>
+                <TextBlock Text="In-App Messages" Style="{StaticResource TitleText}" Margin="0,0,0,16"/>
+                <ListBox x:Name="lstMessages" Height="220" Background="Transparent" BorderThickness="0" ItemContainerStyle="{StaticResource ListBoxItemStyle}"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

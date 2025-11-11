@@ -17,23 +17,23 @@ namespace MunicipalityApp.DataStructures
         {
             public TKey Key;
             public TValue Value;
-            public Node Left;
-            public Node Right;
+            public Node? Left;
+            public Node? Right;
             public bool Color = Red; // new nodes are red
             public Node(TKey key, TValue value) { Key = key; Value = value; }
         }
 
-        public Node Root { get; private set; }
+        public Node? Root { get; private set; }
 
-        private static bool IsRed(Node n) => n != null && n.Color == Red;
+    private static bool IsRed(Node? n) => n != null && n.Color == Red;
 
         private static Node RotateLeft(Node h)
         {
-            var x = h.Right; h.Right = x.Left; x.Left = h; x.Color = h.Color; h.Color = Red; return x;
+            var x = h.Right!; h.Right = x.Left; x.Left = h; x.Color = h.Color; h.Color = Red; return x;
         }
         private static Node RotateRight(Node h)
         {
-            var x = h.Left; h.Left = x.Right; x.Right = h; x.Color = h.Color; h.Color = Red; return x;
+            var x = h.Left!; h.Left = x.Right; x.Right = h; x.Color = h.Color; h.Color = Red; return x;
         }
         private static void FlipColors(Node h)
         {
@@ -47,7 +47,7 @@ namespace MunicipalityApp.DataStructures
             Root = Insert(Root, key, value);
             Root.Color = Black;
         }
-        private Node Insert(Node h, TKey key, TValue value)
+        private Node Insert(Node? h, TKey key, TValue value)
         {
             if (h == null) return new Node(key, value);
             int cmp = key.CompareTo(h.Key);
@@ -56,7 +56,7 @@ namespace MunicipalityApp.DataStructures
             else h.Value = value;
 
             if (IsRed(h.Right) && !IsRed(h.Left)) h = RotateLeft(h);
-            if (IsRed(h.Left) && IsRed(h.Left.Left)) h = RotateRight(h);
+            if (IsRed(h.Left) && IsRed(h.Left?.Left)) h = RotateRight(h);
             if (IsRed(h.Left) && IsRed(h.Right)) FlipColors(h);
             return h;
         }

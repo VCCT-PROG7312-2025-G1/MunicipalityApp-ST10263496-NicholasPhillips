@@ -9,14 +9,14 @@ namespace MunicipalityApp.Models
     public class Issue
     {
         public DateTime ReportedDate { get; private set; } = DateTime.Now;
-        // The location where the issue was found or reported
-        public string Location { get; set; }
+    // The location where the issue was found or reported
+    public string Location { get; set; } = string.Empty;
 
-        // The category of the issue (e.g., road, lighting, waste)
-        public string Category { get; set; }
+    // The category of the issue (e.g., road, lighting, waste)
+    public string Category { get; set; } = string.Empty;
 
-        // A detailed description of the issue
-        public string Description { get; set; }
+    // A detailed description of the issue
+    public string Description { get; set; } = string.Empty;
 
         // Points assigned to the issue, used for prioritization or tracking
         public int Points { get; set; } = 10;
@@ -42,7 +42,7 @@ namespace MunicipalityApp.Models
         }
         
         // Get the most recently added attachment
-        public string GetMostRecentAttachment()
+        public string? GetMostRecentAttachment()
         {
             lock (_attachmentStack)
             {

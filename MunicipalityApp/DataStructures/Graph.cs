@@ -6,7 +6,7 @@ namespace MunicipalityApp.DataStructures
     // Lightweight undirected weighted graph with BFS traversal and Prim-based MST.
     // Nodes are indexed integers mapping to stored values of type <typeparamref name="T"/>.
 
-    public class Graph<T>
+    public class Graph<T> where T : notnull
     {
 
         // Edge representation used for MST output.

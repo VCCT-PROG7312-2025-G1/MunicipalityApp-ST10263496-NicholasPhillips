@@ -12,15 +12,15 @@ namespace MunicipalityApp.DataStructures
         {
             public TKey Key;
             public TValue Value;
-            public Node Left;
-            public Node Right;
+            public Node? Left;
+            public Node? Right;
             public Node(TKey key, TValue value)
             {
                 Key = key; Value = value;
             }
         }
 
-        public Node Root { get; private set; }
+        public Node? Root { get; private set; }
 
         // Inserts or updates a value by key following BST ordering rules.
         public void Insert(TKey key, TValue value)
@@ -28,7 +28,7 @@ namespace MunicipalityApp.DataStructures
             Root = Insert(Root, key, value);
         }
 
-        private Node Insert(Node node, TKey key, TValue value)
+        private Node Insert(Node? node, TKey key, TValue value)
         {
             if (node == null) return new Node(key, value);
             int cmp = key.CompareTo(node.Key);

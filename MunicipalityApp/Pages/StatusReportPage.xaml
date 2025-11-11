@@ -1,0 +1,76 @@
+<Page x:Class="MunicipalityApp.Pages.StatusReportPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{StaticResource AppBackgroundGradient}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid>
+            <Border Style="{StaticResource CenteredPageContainer}">
+                <Border Style="{StaticResource MainCard}" VerticalAlignment="Stretch">
+                    <StackPanel>
+                        <TextBlock Text="Your Submitted Issues" 
+                                 Style="{StaticResource TitleText}"
+                                 Foreground="{StaticResource PrimaryDarkTealBrush}"
+                                 Margin="0,0,0,16"/>
+
+                        <DockPanel Margin="0,0,0,12">
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                                <TextBlock Text="Search by ID:" VerticalAlignment="Center" Foreground="{StaticResource PrimaryDarkTealBrush}"/>
+                                <TextBox x:Name="txtSearchId" Width="320" Margin="8,0,0,0" Style="{StaticResource TextBoxStyle}"/>
+                                <Button Content="Find" Style="{StaticResource PrimaryButton}" Width="80" Margin="10,0,0,0"/>
+                            </StackPanel>
+                            <Button Content="Refresh Indexes" Style="{StaticResource PrimaryButton}" Width="160" HorizontalAlignment="Right"/>
+                        </DockPanel>
+
+                        <Border BorderBrush="{StaticResource DividerBrush}" 
+                                BorderThickness="1" 
+                                CornerRadius="4">
+                            <ListBox x:Name="lstIssues"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     ItemContainerStyle="{StaticResource ListBoxItemStyle}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="{StaticResource DividerBrush}" BorderThickness="0,0,0,1" Padding="10">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="220"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,4">
+                                                    <TextBlock Text="{Binding Title}" FontWeight="Bold" Foreground="{StaticResource PrimaryDarkTealBrush}"/>
+                                                    <TextBlock Text="{Binding Id}" FontSize="{StaticResource SmallFontSize}" Foreground="{StaticResource NeutralFaintBrush}"/>
+                                                    <TextBlock Text="{Binding Category}" FontSize="{StaticResource SmallFontSize}" Foreground="{StaticResource NeutralMutedBrush}"/>
+                                                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Foreground="{StaticResource TextPrimaryBrush}"/>
+                                                </StackPanel>
+
+                                                <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch">
+                                                    <TextBlock Text="{Binding Status}" HorizontalAlignment="Right" FontWeight="Bold" Foreground="{StaticResource PrimaryDarkTealBrush}"/>
+                                                    <TextBlock Text="{Binding ReportedDate, StringFormat=Reported: {0:g}}" HorizontalAlignment="Right" Foreground="{StaticResource NeutralMutedBrush}"/>
+                                                    <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}" Height="10" Margin="0,8,0,0"/>
+                                                    <TextBlock Text="{Binding Progress, StringFormat=Progress: {0}%}" HorizontalAlignment="Right" FontSize="{StaticResource SmallFontSize}" Foreground="{StaticResource NeutralMutedBrush}"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Border>
+
+                        <Button Content="Back to Main Menu" 
+                                Style="{StaticResource PrimaryButton}"
+                                Background="Transparent"
+                                BorderBrush="{StaticResource PrimaryDarkTealBrush}"
+                                Foreground="{StaticResource PrimaryDarkTealBrush}"
+                                Margin="0,25,0,0" Height="36" Click="btnBack_Click"/>
+                    </StackPanel>
+                </Border>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</Page>

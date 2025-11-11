@@ -61,7 +61,7 @@ namespace MunicipalityApp.Data
 
 
         // Attempts to get the next issue for processing in FIFO order.
-        public static bool TryGetNextIssue(out UserIssue issue)
+        public static bool TryGetNextIssue(out UserIssue? issue)
         {
             lock (_lock)
             {

@@ -5,7 +5,7 @@
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         Topmost="True" ShowInTaskbar="False">
 
-    <Border Background="#2ECC71" CornerRadius="8" Padding="10" Margin="5">
-        <TextBlock x:Name="txtMessage" Foreground="White" FontSize="14" TextWrapping="Wrap"/>
+    <Border Background="{StaticResource PrimaryTealBrush}" CornerRadius="8" Padding="10" Margin="5" Effect="{StaticResource DropShadowEffect}">
+        <TextBlock x:Name="txtMessage" Style="{StaticResource BodyText}" Foreground="White" TextWrapping="Wrap"/>
     </Border>
 </Window>

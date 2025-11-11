@@ -226,11 +226,7 @@ namespace MunicipalityApp
         // Navigates back to the main window and closes this window.
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
-            // Open the main window
-            MainWindow main = new MainWindow();
-            main.Show();
-
-            // Close this AnnouncementsWindow
+            MunicipalityApp.Services.NavigationManager.ShowMainWindow();
             this.Close();
         }
 

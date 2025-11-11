@@ -1,89 +1,142 @@
 <Window x:Class="MunicipalityApp.StatusReportWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Status Report" 
-        Height="600" 
-        Width="800"
+        Title="Status Report"
+        Height="620"
+        Width="880"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource PrimaryDarkTealBrush}"
-        Foreground="White">
+        Background="{StaticResource BackgroundBrush}"
+        Foreground="{StaticResource TextPrimaryBrush}"
+        FontFamily="Segoe UI"
+        FontSize="14">
 
     <Grid Margin="30">
-        <Border CornerRadius="8" 
-                Background="White" 
-                Padding="30"
-                Effect="{StaticResource DropShadowEffect}" Height="524" VerticalAlignment="Center">
+        <!-- Main Card Container -->
+        <Border CornerRadius="12"
+                Padding="28"
+                Background="{StaticResource SurfaceBrush}"
+                Effect="{StaticResource SubtleShadow}">
             <StackPanel>
-                <TextBlock Text="Your Submitted Issues" 
-                         FontSize="24" 
-                         FontWeight="Bold" 
-                         Foreground="{StaticResource PrimaryDarkTealBrush}"
-                         Margin="0,0,0,20"/>
 
-                <!-- Search and Actions: GUID search (BST lookup) + rebuild indexes (BST/AVL/RBT/Heap/Graph) -->
-                <DockPanel Margin="0,0,0,12">
+                <!-- Header Section -->
+                <TextBlock Text="Your Submitted Issues"
+                           Style="{StaticResource TitleText}"
+                           FontSize="26"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource PrimaryDarkTealBrush}"
+                           Margin="0,0,0,12"/>
+
+                <!-- Search and Index Controls -->
+                <DockPanel LastChildFill="False" Margin="0,0,0,10">
+                    <!-- Search Controls -->
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-                        <TextBlock Text="Search by ID:" VerticalAlignment="Center" Foreground="{StaticResource PrimaryDarkTealBrush}"/>
-                        <TextBox x:Name="txtSearchId" Width="320" Margin="8,0,0,0"/>
-                        <Button Content="Find" Style="{StaticResource PrimaryButton}" Width="80" Margin="10,0,0,0" Click="btnFind_Click"/>
+                        <TextBlock Text="Search by ID:"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource PrimaryDarkTealBrush}"/>
+                        <TextBox x:Name="txtSearchId"
+                                 Width="280"
+                                 Style="{StaticResource TextBoxStyle}"
+                                 ToolTip="Enter the issue ID to find a specific report"/>
+                        <Button Content="Find"
+                                Style="{StaticResource PrimaryButton}"
+                                Width="90"
+                                Click="btnFind_Click"/>
                     </StackPanel>
-                    <Button Content="Refresh Indexes" Style="{StaticResource PrimaryButton}" Width="140" HorizontalAlignment="Right" Click="btnRefresh_Click"/>
+
+                    <!-- Refresh Index Button -->
+                    <Button Content="Rebuild Indexes"
+                            Style="{StaticResource SecondaryButton}"
+                            Width="160"
+                            Margin="12,0,0,0"
+                            Click="btnRefresh_Click"/>
                 </DockPanel>
 
-                <Border BorderBrush="#EEEEEE" 
-                        BorderThickness="1" 
-                        Height="350"
-                        CornerRadius="4">
-                    <ListBox x:Name="lstIssues"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             ItemContainerStyle="{StaticResource ListBoxItemStyle}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Border BorderBrush="#EEEEEE" BorderThickness="0,0,0,1" Padding="10">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="220"/>
-                                        </Grid.ColumnDefinitions>
+                <!-- Issue List Section -->
+                <Border BorderBrush="{StaticResource DividerBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Background="{StaticResource CardBackgroundBrush}"
+                        Padding="10"
+                        SnapsToDevicePixels="True">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ListBox x:Name="lstIssues"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 ItemContainerStyle="{StaticResource ListBoxItemStyle}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="12"
+                                            BorderBrush="{StaticResource DividerBrush}"
+                                            BorderThickness="0,0,0,1">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="230"/>
+                                            </Grid.ColumnDefinitions>
 
-                                        <!-- Main details -->
-                                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,4">
-                                            <TextBlock Text="{Binding Title}" FontWeight="Bold" Foreground="{StaticResource PrimaryDarkTealBrush}"/>
-                                            <!-- Show the unique service request ID to enable cross-window tracking and search -->
-                                            <TextBlock Text="{Binding Id}" FontSize="12" Foreground="#888"/>
-                                            <TextBlock Text="{Binding Category}" FontSize="12" Foreground="#666"/>
-                                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Foreground="#333"/>
-                                        </StackPanel>
+                                            <!-- Left Column: Issue Details -->
+                                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,4">
+                                                <TextBlock Text="{Binding Title}"
+                                                           FontWeight="Bold"
+                                                           FontSize="15"
+                                                           Foreground="{StaticResource PrimaryDarkTealBrush}"/>
+                                                <TextBlock Text="{Binding Id}"
+                                                           FontSize="12"
+                                                           Foreground="{StaticResource NeutralFaintBrush}"/>
+                                                <TextBlock Text="{Binding Category}"
+                                                           FontSize="12"
+                                                           Foreground="{StaticResource NeutralMutedBrush}"/>
+                                                <TextBlock Text="{Binding Description}"
+                                                           TextWrapping="Wrap"
+                                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                                           Margin="0,4,0,0"/>
+                                            </StackPanel>
 
-                                        <!-- Status and progress -->
-                                        <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch">
-                                            <!-- Current workflow status -->
-                                            <TextBlock Text="{Binding Status}" HorizontalAlignment="Right" FontWeight="Bold" Foreground="{StaticResource PrimaryDarkTealBrush}"/>
-                                            <TextBlock Text="{Binding ReportedDate, StringFormat=Reported: {0:g}}" HorizontalAlignment="Right" Foreground="#666"/>
-                                            <!-- Progress bar reflects the percentage completion (0-100) -->
-                                            <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}" Height="10" Margin="0,8,0,0"/>
-                                            <TextBlock Text="{Binding Progress, StringFormat=Progress: {0}%}" HorizontalAlignment="Right" FontSize="12" Foreground="#666"/>
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                            <!-- Right Column: Status and Progress -->
+                                            <StackPanel Grid.Row="0" Grid.Column="1"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Status}"
+                                                           HorizontalAlignment="Right"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{StaticResource PrimaryDarkTealBrush}"/>
+                                                <TextBlock Text="{Binding ReportedDate, StringFormat=Reported: {0:g}}"
+                                                           HorizontalAlignment="Right"
+                                                           Foreground="{StaticResource NeutralMutedBrush}"
+                                                           FontSize="12"/>
+                                                <ProgressBar Minimum="0"
+                                                             Maximum="100"
+                                                             Value="{Binding Progress}"
+                                                             Height="10"
+                                                             Margin="0,6,0,0"/>
+                                                <TextBlock Text="{Binding Progress, StringFormat=Progress: {0}%}"
+                                                           HorizontalAlignment="Right"
+                                                           FontSize="12"
+                                                           Foreground="{StaticResource NeutralMutedBrush}"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
                 </Border>
 
-                <Button Content="Back to Main Menu" 
+                <!-- Navigation Button -->
+                <Button Content="Back to Main Menu"
                         Style="{StaticResource PrimaryButton}"
                         Background="Transparent"
                         BorderBrush="{StaticResource PrimaryDarkTealBrush}"
                         Foreground="{StaticResource PrimaryDarkTealBrush}"
-                        Margin="0,25,0,0" 
-                        Click="btnBack_Click" Height="35"/>
+                        Height="38"
+                        Width="200"
+                        HorizontalAlignment="Center"
+                        Click="btnBack_Click"/>
             </StackPanel>
         </Border>
     </Grid>

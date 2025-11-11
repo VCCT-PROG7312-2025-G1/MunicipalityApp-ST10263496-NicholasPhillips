@@ -7,20 +7,13 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace MunicipalityApp
+namespace MunicipalityApp.Pages
 {
-
-    // Interaction logic for ReportIssueWindow.
-    // Allows users to report municipal issues, attach media, and submit reports.
-
-    public partial class ReportIssueWindow : Window
+    public partial class ReportIssuePage : Page
     {
-        // Stores the file path of the attached media.
         private string attachedFilePath = "";
 
-
-        // Initializes the window and sets up event handlers for progress tracking.
-        public ReportIssueWindow()
+        public ReportIssuePage()
         {
             InitializeComponent();
 
@@ -30,16 +23,12 @@ namespace MunicipalityApp
             cmbCategory.SelectionChanged += (s, e) => UpdateProgressBar();
         }
 
-
-        // Updates the progress bar based on completed input fields.
-        // Animates the progress and changes color according to completion.
         private void UpdateProgressBar()
         {
             double progress = 0;
             int totalFields = 4; // Title, Category, Description, File
             int completedFields = 0;
 
-            // Check each field for completion.
             if (!string.IsNullOrWhiteSpace(txtTitle.Text)) completedFields++;
             if (cmbCategory.SelectedItem != null) completedFields++;
             if (!string.IsNullOrWhiteSpace(txtDescription.Text)) completedFields++;
@@ -47,16 +36,14 @@ namespace MunicipalityApp
 
             progress = (completedFields / (double)totalFields) * 100;
 
-            // Animate progress bar value.
             DoubleAnimation animation = new DoubleAnimation
             {
                 To = progress,
-                Duration = TimeSpan.FromMilliseconds(400), // 0.4 second animation
+                Duration = TimeSpan.FromMilliseconds(400),
                 EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
             };
             progressBar.BeginAnimation(System.Windows.Controls.Primitives.RangeBase.ValueProperty, animation);
 
-            // Change progress bar color based on progress.
             if (progress <= 33)
             {
                 progressBar.Foreground = new SolidColorBrush(Colors.Red);
@@ -71,10 +58,6 @@ namespace MunicipalityApp
             }
         }
 
-
-        // Handles the Attach Media button click event.
-        // Opens a file dialog for the user to select a file and updates the UI.
-
         private void btnAttachMedia_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
@@ -83,20 +66,14 @@ namespace MunicipalityApp
             {
                 attachedFilePath = dlg.FileName;
                 lblFilePath.Text = $"Attached: {attachedFilePath}";
-                UpdateProgressBar(); // animate after file attach
+                UpdateProgressBar();
             }
         }
 
-
-        // Handles the Submit Report button click event.
-        // Validates input, creates a new issue, saves it, awards points, and resets the form.
-
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            // Declare a single toast variable for the method.
             ToastNotification toast;
 
-            // Validate required fields.
             if (string.IsNullOrWhiteSpace(txtTitle.Text) || cmbCategory.SelectedItem == null)
             {
                 toast = new ToastNotification("Please fill in all required fields.");
@@ -104,7 +81,6 @@ namespace MunicipalityApp
                 return;
             }
 
-            // Create new issue object.
             var issue = new UserIssue
             {
                 Title = txtTitle.Text,
@@ -114,13 +90,9 @@ namespace MunicipalityApp
                 Status = "Pending"
             };
 
-            // Save issue in repository.
             IssueRepository.AddIssue(issue);
-
-            // Award points to the user.
             UserRepository.CurrentUser.AddPoints(10);
 
-            // Show success toast notification
             toast = new ToastNotification(
                 $"Issue submitted successfully! 🎉\n" +
                 $"Request ID: {issue.Id}\n" +
@@ -129,22 +101,18 @@ namespace MunicipalityApp
             );
             toast.Show();
 
-            // Reset form fields.
             txtTitle.Clear();
             txtDescription.Clear();
             cmbCategory.SelectedIndex = -1;
             attachedFilePath = "";
             lblFilePath.Text = "No file selected.";
-            UpdateProgressBar(); // reset progress
+            UpdateProgressBar();
         }
 
-
-        // Handles the Back button click event.
-        // Returns to the main window and closes the current window.
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
-            MunicipalityApp.Services.NavigationManager.ShowMainWindow();
-            this.Close();
+            // Navigate back to the main home page in the hosting Frame
+            this.NavigationService?.Navigate(new MainHomePage());
         }
     }
 }

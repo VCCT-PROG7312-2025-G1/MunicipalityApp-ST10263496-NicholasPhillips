@@ -13,7 +13,7 @@ namespace MunicipalityApp
 
     public partial class StatusReportWindow : Window
     {
-        private ServiceRequestIndex _index;
+    private ServiceRequestIndex? _index;
 
         // Initializes the StatusReportWindow and loads the reported issues.
         public StatusReportWindow()
@@ -46,8 +46,7 @@ namespace MunicipalityApp
         // Returns to the main window and closes the current window.
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow main = new MainWindow();
-            main.Show();
+            MunicipalityApp.Services.NavigationManager.ShowMainWindow();
             this.Close();
         }
 

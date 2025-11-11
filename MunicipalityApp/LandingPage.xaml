@@ -1,7 +1,9 @@
 <Window x:Class="MunicipalityApp.LandingPage"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Loading..." Height="400" Width="600"
+        Title="Loading..."
+        Height="420"
+        Width="640"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
@@ -9,10 +11,18 @@
         ShowInTaskbar="False"
         Topmost="True">
 
-    <!-- Background with new color scheme -->
-    <Grid Background="{StaticResource PrimaryDarkTealBrush}">
+    <!-- Elegant gradient background -->
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#004D40" Offset="0.0"/>   <!-- Deep teal -->
+                <GradientStop Color="#00695C" Offset="1.0"/>   <!-- Soft transition teal -->
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <!-- Logo -->
+
+            <!-- Logo with glow and scale animation -->
             <Image x:Name="logoContainer"
                    Source="/SA-coat-of-arms.png"
                    Width="180"
@@ -23,13 +33,18 @@
                 <Image.RenderTransform>
                     <ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
                 </Image.RenderTransform>
+                <Image.Effect>
+                    <DropShadowEffect BlurRadius="20"
+                                      ShadowDepth="0"
+                                      Color="#AA000000"
+                                      Opacity="0.5"/>
+                </Image.Effect>
             </Image>
 
             <!-- Title -->
             <TextBlock x:Name="txtTitle"
                        Text="South African"
-                       FontSize="32" 
-                       FontWeight="Bold"
+                       Style="{StaticResource TitleText}"
                        Foreground="{StaticResource AccentYellowBrush}"
                        TextAlignment="Center"
                        Opacity="0" 
@@ -42,78 +57,83 @@
             <!-- Tagline -->
             <TextBlock x:Name="txtTagline"
                        Text="Connecting Citizens with Services"
-                       FontSize="18"
+                       Style="{StaticResource SubtitleText}"
                        Foreground="{StaticResource NeutralWhiteBrush}"
                        TextAlignment="Center"
                        Margin="0,15,0,30"
-                       Opacity="0" RenderTransformOrigin="0.5,0.5">
+                       Opacity="0"
+                       RenderTransformOrigin="0.5,0.5">
                 <TextBlock.RenderTransform>
                     <TranslateTransform Y="50"/>
                 </TextBlock.RenderTransform>
             </TextBlock>
 
-            <!-- Progress Bar -->
-            <ProgressBar IsIndeterminate="True"
-                         Width="300" 
-                         Height="8"
-                         Margin="0,40,0,0"
-                         Style="{StaticResource {x:Type ProgressBar}}"
-                         Foreground="{StaticResource AccentYellowBrush}"
-                         Background="#1B3838"
-                         BorderThickness="0">
-                <ProgressBar.Resources>
-                    <SolidColorBrush x:Key="ProgressBar.Background" Color="#1B3838"/>
-                    <SolidColorBrush x:Key="ProgressBar.Border" Color="#1B3838"/>
-                </ProgressBar.Resources>
-            </ProgressBar>
+            <!-- Progress Bar with rounded corners -->
+            <Border CornerRadius="6" Width="320" Height="8" Background="#1AFFFFFF">
+                <ProgressBar IsIndeterminate="True"
+                             Foreground="{StaticResource AccentYellowBrush}"
+                             Background="Transparent"
+                             BorderThickness="0"/>
+            </Border>
         </StackPanel>
 
-        <!-- Animations -->
+        <!-- Entry Animations -->
         <Grid.Triggers>
-            <!-- Logo Animation -->
-            <EventTrigger RoutedEvent="Grid.Loaded">
-                <BeginStoryboard>
-                    <Storyboard>
-                        <!-- Logo fade in and scale up -->
-                        <DoubleAnimation 
-                            Storyboard.TargetName="logoContainer"
-                            Storyboard.TargetProperty="Opacity"
-                            From="0" To="1" Duration="0:0:0.8"/>
-                        <DoubleAnimation 
-                            Storyboard.TargetName="logoContainer"
-                            Storyboard.TargetProperty="RenderTransform.ScaleX"
-                            From="0.5" To="1" Duration="0:0:0.8"
-                            DecelerationRatio="0.7"/>
-                        <DoubleAnimation 
-                            Storyboard.TargetName="logoContainer"
-                            Storyboard.TargetProperty="RenderTransform.ScaleY"
-                            From="0.5" To="1" Duration="0:0:0.8"
-                            DecelerationRatio="0.7"/>
-                    </Storyboard>
-                </BeginStoryboard>
-            </EventTrigger>
-            
-            <EventTrigger RoutedEvent="Grid.Loaded">
-                <BeginStoryboard>
-                    <Storyboard>
-                        <DoubleAnimation Storyboard.TargetName="txtTitle"
-                                         Storyboard.TargetProperty="Opacity"
-                                         From="0" To="1" Duration="0:0:1"/>
-                        <DoubleAnimation Storyboard.TargetName="txtTitle"
-                                         Storyboard.TargetProperty="(TextBlock.RenderTransform).(TranslateTransform.Y)"
-                                         From="50" To="0" Duration="0:0:1"/>
 
-                        <DoubleAnimation Storyboard.TargetName="txtTagline"
+            <!-- Logo fade + scale -->
+            <EventTrigger RoutedEvent="Grid.Loaded">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="logoContainer"
                                          Storyboard.TargetProperty="Opacity"
-                                         From="0" To="1" Duration="0:0:1"
-                                         BeginTime="0:0:0.5"/>
-                        <DoubleAnimation Storyboard.TargetName="txtTagline"
-                                         Storyboard.TargetProperty="(TextBlock.RenderTransform).(TranslateTransform.Y)"
-                                         From="50" To="0" Duration="0:0:1"
-                                         BeginTime="0:0:0.5"/>
+                                         From="0" To="1"
+                                         Duration="0:0:1"
+                                         DecelerationRatio="0.7"/>
+                        <DoubleAnimation Storyboard.TargetName="logoContainer"
+                                         Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                         From="0.5" To="1"
+                                         Duration="0:0:1"
+                                         DecelerationRatio="0.8"/>
+                        <DoubleAnimation Storyboard.TargetName="logoContainer"
+                                         Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                         From="0.5" To="1"
+                                         Duration="0:0:1"
+                                         DecelerationRatio="0.8"/>
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>
+
+            <!-- Title and tagline staggered fade/slide -->
+            <EventTrigger RoutedEvent="Grid.Loaded">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <!-- Title -->
+                        <DoubleAnimation Storyboard.TargetName="txtTitle"
+                                         Storyboard.TargetProperty="Opacity"
+                                         From="0" To="1"
+                                         Duration="0:0:1.2"
+                                         BeginTime="0:0:0.3"/>
+                        <DoubleAnimation Storyboard.TargetName="txtTitle"
+                                         Storyboard.TargetProperty="(TextBlock.RenderTransform).(TranslateTransform.Y)"
+                                         From="50" To="0"
+                                         Duration="0:0:1.2"
+                                         BeginTime="0:0:0.3"/>
+
+                        <!-- Tagline -->
+                        <DoubleAnimation Storyboard.TargetName="txtTagline"
+                                         Storyboard.TargetProperty="Opacity"
+                                         From="0" To="1"
+                                         Duration="0:0:1"
+                                         BeginTime="0:0:1"/>
+                        <DoubleAnimation Storyboard.TargetName="txtTagline"
+                                         Storyboard.TargetProperty="(TextBlock.RenderTransform).(TranslateTransform.Y)"
+                                         From="50" To="0"
+                                         Duration="0:0:1"
+                                         BeginTime="0:0:1"/>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+
         </Grid.Triggers>
     </Grid>
 </Window>
