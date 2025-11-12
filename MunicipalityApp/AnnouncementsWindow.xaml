@@ -17,11 +17,12 @@
      -->
 
     <!-- MAIN LAYOUT -->
-    <Grid Margin="40">
+    <Grid Margin="28">
         <Border CornerRadius="18"
-                Padding="30"
+                Padding="22"
                 Background="White"
-                Effect="{StaticResource CardShadow}">
+                Effect="{StaticResource CardShadow}"
+                MaxWidth="900">
 
             <StackPanel>
                 <!-- Header -->
@@ -32,28 +33,28 @@
                            TextAlignment="Center"
                            Margin="0,0,0,20"/>
 
-                <!-- Filters -->
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center"
-                            Margin="0,0,0,20">
-                    <TextBox x:Name="txtSearch"
-                             Width="320"
-                             Height="36"
-                             Tag="Search announcements..."
-                             Style="{StaticResource WatermarkTextBox}"
-                             VerticalContentAlignment="Center"/>
+        <!-- Filters: use WrapPanel so controls don't overflow on smaller windows -->
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,18" ItemHeight="36">
+            <TextBox x:Name="txtSearch"
+                 Width="280"
+                 Height="34"
+                 Tag="Search announcements..."
+                 Style="{StaticResource WatermarkTextBox}"
+                 VerticalContentAlignment="Center"/>
 
-                    <ComboBox x:Name="cmbLocationFilter"
-                              Width="200"
-                              Style="{StaticResource ModernComboBox}"
-                              SelectionChanged="cmbLocationFilter_SelectionChanged"/>
+            <ComboBox x:Name="cmbLocationFilter"
+                  Width="180"
+                  Margin="8,0,0,0"
+                  Style="{StaticResource ModernComboBox}"
+                  SelectionChanged="cmbLocationFilter_SelectionChanged"/>
 
-                    <Button Content="← Back"
-                            Width="100"
-                            Height="36"
-                            Style="{StaticResource ModernButton}"
-                            Click="btnBack_Click"/>
-                </StackPanel>
+            <Button Content="← Back"
+                Width="90"
+                Height="34"
+                Margin="8,0,0,0"
+                Style="{StaticResource InCardButton}"
+                Click="btnBack_Click"/>
+        </WrapPanel>
 
                 <!-- Announcements Section -->
                 <TextBlock Text="Current Announcements"
@@ -61,7 +62,7 @@
                            FontWeight="SemiBold"
                            Margin="0,0,0,6"/>
                 <ListBox x:Name="lstAnnouncements"
-                         Height="240"
+                         Height="220"
                          BorderThickness="0"
                          Background="Transparent"
                          Foreground="#0F4C5C">
@@ -91,7 +92,7 @@
                            FontWeight="SemiBold"
                            Margin="0,25,0,6"/>
                 <ListBox x:Name="lstRecommendations"
-                         Height="180"
+                         Height="160"
                          BorderThickness="0"
                          Background="Transparent"
                          Foreground="#0F4C5C">

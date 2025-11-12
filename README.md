@@ -32,7 +32,7 @@ Entry point is configured via `App.xaml` with `StartupUri="LandingPage.xaml"`, w
 - **Report Issues**: Submit a title, category, description, and optional media attachment in `ReportIssueWindow`.
 - **Progress Feedback**: Animated progress bar and contextual coloring during report composition.
 - **Announcements & Events**: `AnnouncementsWindow` lists events generated with Bogus, supports search, location filters, and recommendations.
-- **Status Reporting**: `StatusReportWindow` summarizes your submitted issues (newest first).
+- **Status Reporting**: `StatusReportPage` (or `StatusReportWindow`) summarizes your submitted issues (newest first).
 - **View Issues**: `ViewIssueWindow` displays issues in a data grid snapshot.
 - **Toast Notifications**: Lightweight, timed notifications implemented in `ToastNotification`.
 - **User Points & Badges**: `UserRepository.CurrentUser` accrues points for submissions and surfaces badge status in success toasts.
@@ -61,7 +61,7 @@ MunicipalityApp/
    ├─ MainWindow.xaml(.cs)                   ← Main navigation menu
    ├─ AnnouncementsWindow.xaml(.cs)          ← Events list, search, filters, recommendations
    ├─ ReportIssueWindow.xaml(.cs)            ← Issue submission flow with progress bar
-   ├─ StatusReportWindow.xaml(.cs)           ← Summary list of submitted issues
+  ├─ StatusReportPage.xaml(.cs)             ← Summary list of submitted issues (Page-in-Frame recommended)
    ├─ ViewIssueWindow.xaml(.cs)              ← Data grid snapshot of issues
    ├─ ToastNotification.xaml(.cs)            ← In-app toast messages
    ├─ Converters/

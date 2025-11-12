@@ -23,8 +23,8 @@ namespace MunicipalityApp
 
         private void btnReportIssues_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate the main Frame to the ReportIssuePage
-            MainFrame.Navigate(new Pages.ReportIssuePage());
+            // Open the ReportIssueWindow and hide the main window.
+            MunicipalityApp.Services.NavigationManager.NavigateTo(new ReportIssueWindow());
             var toast = new ToastNotification("Opening Report Issue form...");
             toast.Show();
         }
@@ -34,7 +34,7 @@ namespace MunicipalityApp
         // Opens the AnnouncementsWindow and hides the main window.
         private void btnAnnouncements_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new Pages.AnnouncementsPage());
+            MunicipalityApp.Services.NavigationManager.NavigateTo(new AnnouncementsWindow());
             var toast = new ToastNotification("Opening Announcements...");
             toast.Show();
         }
@@ -45,10 +45,14 @@ namespace MunicipalityApp
 
         private void btnStatusReport_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new Pages.StatusReportPage());
-            var toast = new ToastNotification("Opening Status Report...");
+            // Open the ServiceRequestStatusWindow (window-based UI) and hide the main window.
+            MunicipalityApp.Services.NavigationManager.NavigateTo(new Windows.ServiceRequestStatusWindow());
+            var toast = new ToastNotification("Opening Service Request Status window...");
             toast.Show();
         }
+
+        // Notifications tab removed from navigation bar. Message Center can still be opened
+        // programmatically if needed elsewhere in the app.
 
 
         // Handles the Home button click event.
@@ -56,10 +60,10 @@ namespace MunicipalityApp
 
         private void btnHome_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate back to the internal home page
-            MainFrame.Navigate(new Pages.MainHomePage());
-            var toast = new ToastNotification("You're already on the home page");
+            // Already on the main window; show a friendly toast and ensure focus
+            var toast = new ToastNotification("Showing Home...");
             toast.Show();
+            this.Activate();
         }
 
 

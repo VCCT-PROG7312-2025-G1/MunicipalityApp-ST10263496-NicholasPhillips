@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Bogus;
 using MunicipalityApp.Models;
+using MunicipalityApp.Data;
 
 // PART TWO
 namespace MunicipalityApp
@@ -31,9 +32,18 @@ namespace MunicipalityApp
         public AnnouncementsWindow()
         {
             InitializeComponent();
-            LoadSampleEvents();
+            // Use SampleEventService to generate sample data instead of inlining Bogus in the window.
+            var sampleSvc = new MunicipalityApp.Services.SampleEventService();
+            LoadSampleEvents(sampleSvc.GenerateSampleEvents(50));
+            // Also load persisted user-submitted reports so they appear in the announcements list
+            // when the window is opened after reports were submitted.
+            LoadPersistedUserIssues();
             PopulateLocationFilter();
             DisplayEvents();
+
+            // Subscribe to new user issues so location filters can include reported locations
+            IssueRepository.IssueAdded += OnUserIssueAdded;
+            this.Closed += (s, e) => IssueRepository.IssueAdded -= OnUserIssueAdded;
 
             // Hook up live search
             txtSearch.TextChanged += TxtSearch_TextChanged;
@@ -42,42 +52,91 @@ namespace MunicipalityApp
             cmbLocationFilter.SelectionChanged += cmbLocationFilter_SelectionChanged;
         }
 
-
-        // Generates sample events using Bogus and stores them across the in-memory structures.
-        private void LoadSampleEvents() // Generate sample events using Bogus
+        // Load persisted user-submitted issues from IssueRepository and convert them to Event entries
+        // so that reports saved to disk are visible in the Announcements window.
+        private void LoadPersistedUserIssues()
         {
-            var categoriesList = new[] // Categories of municipal issues
+            try
             {
-                "Water", "Electricity", "Transport", "Public Safety", "Community"
-            };
-
-            var issueTypes = new[] // Types of issues for event titles
-            {
-                "Water Leak", "Burst Pipe", "Scheduled Maintenance", "Car Accident",
-                "Power Outage", "Load Shedding", "Road Repair", "Traffic Lights Faulty",
-                "Public Gathering", "Storm Damage", "Tree Removal", "Waste Collection Delay"
-            };
-
-            var locationList = new[] // Locations within the municipality
-            {
-                "Cape Town", "Durban", "Johannesburg", "Pretoria",
-                "Port Elizabeth", "Bloemfontein", "East London"
-            };
-
-            var faker = new Faker<Event>() // Define rules for generating fake events
-                .RuleFor(e => e.Title, f =>
+                foreach (var issue in MunicipalityApp.Data.IssueRepository.Issues)
                 {
-                    var issue = f.PickRandom(issueTypes);
-                    var street = f.Address.StreetName();
-                    return $"{issue} - {street}";
-                })
-                .RuleFor(e => e.Category, f => f.PickRandom(categoriesList))
-                .RuleFor(e => e.Location, f => f.PickRandom(locationList))
-                .RuleFor(e => e.Date, f => f.Date.Between(DateTime.Today, DateTime.Today.AddDays(30)))
-                .RuleFor(e => e.Priority, f => f.Random.Int(1, 5));
+                    var ev = new Event
+                    {
+                        Title = issue.Title,
+                        Description = issue.Description,
+                        Date = issue.ReportedDate,
+                        Location = issue.Location,
+                        Category = issue.Category,
+                        Priority = 1
+                    };
 
-            var sampleEvents = faker.Generate(50);
+                    var key = ev.Date.Date;
+                    lock (eventsByDate)
+                    {
+                        if (!eventsByDate.ContainsKey(key)) eventsByDate[key] = new List<Event>();
+                        eventsByDate[key].Add(ev);
+                    }
 
+                    if (!string.IsNullOrWhiteSpace(ev.Category)) categories.Add(ev.Category);
+                    if (!string.IsNullOrWhiteSpace(ev.Location)) locations.Add(ev.Location);
+                    upcomingEvents.Enqueue(ev);
+                    priorityEvents.Enqueue(ev, ev.Priority);
+                }
+            }
+            catch { }
+        }
+
+        private void OnUserIssueAdded(UserIssue issue)
+        {
+            // Add new location if present and refresh the filter
+            if (!string.IsNullOrWhiteSpace(issue.Location))
+            {
+                if (!locations.Contains(issue.Location))
+                {
+                    locations.Add(issue.Location);
+                    this.Dispatcher?.Invoke(() => PopulateLocationFilter());
+                }
+            }
+            // Also add the submitted issue as a new announcement/event so users can see recent reports
+            try
+            {
+                var ev = new Event
+                {
+                    Title = issue.Title,
+                    Description = issue.Description,
+                    Date = issue.ReportedDate,
+                    Location = issue.Location,
+                    Category = issue.Category,
+                    Priority = 1
+                };
+
+                // Insert into eventsByDate under the appropriate date
+                var key = ev.Date.Date;
+                lock (eventsByDate)
+                {
+                    if (!eventsByDate.ContainsKey(key)) eventsByDate[key] = new List<Event>();
+                    eventsByDate[key].Add(ev);
+                }
+
+                // Add to auxiliary structures and refresh display on UI thread
+                if (!string.IsNullOrWhiteSpace(ev.Category)) categories.Add(ev.Category);
+                if (!string.IsNullOrWhiteSpace(ev.Location)) locations.Add(ev.Location);
+                upcomingEvents.Enqueue(ev);
+                priorityEvents.Enqueue(ev, ev.Priority);
+
+                this.Dispatcher?.BeginInvoke(new Action(() =>
+                {
+                    // Insert the new announcement at the top of the list for visibility
+                    lstAnnouncements.Items.Insert(0, ev);
+                }));
+            }
+            catch { }
+        }
+
+
+        // Populate the in-memory structures from a provided event set.
+        private void LoadSampleEvents(IEnumerable<Event> sampleEvents)
+        {
             foreach (var ev in sampleEvents)
             {
                 if (!eventsByDate.ContainsKey(ev.Date.Date))

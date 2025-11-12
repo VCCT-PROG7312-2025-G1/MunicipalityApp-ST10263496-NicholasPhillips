@@ -46,7 +46,7 @@ A WPF desktop application for reporting, viewing, and tracking municipal issues.
 
 ## Data Structures in Service Request Status
 
-To achieve efficient organisation and retrieval, `StatusReportWindow` uses indexes built by `Services/ServiceRequestIndex.cs` over in-memory issues from `Data/IssueRepository.cs`.
+To achieve efficient organisation and retrieval, `StatusReportPage` (the Status Report page in the main Frame) uses indexes built by `Services/ServiceRequestIndex.cs` over in-memory issues from `Data/IssueRepository.cs`.
 
 - **Binary Search Tree (BST)** (`DataStructures/BinarySearchTree.cs`)
   - Keyed by `Guid Id` for O(log N) average lookups when searching requests by unique identifier.
@@ -69,9 +69,9 @@ To achieve efficient organisation and retrieval, `StatusReportWindow` uses index
 
 ### Where it is used
 
-- **Repository:** `Data/IssueRepository.cs` stores `UserIssue` items and exposes `Issues` and `GetIssuesNewestFirst()`.
-- **Index:** `Services/ServiceRequestIndex.cs` builds the above structures for lookups and traversals.
-- **UI:** `StatusReportWindow.xaml` binds to `UserIssue` items and uses search/refresh handlers in `StatusReportWindow.xaml.cs`.
+-- **Repository:** `Data/IssueRepository.cs` stores `UserIssue` items and exposes `Issues` and `GetIssuesNewestFirst()`.
+-- **Index:** `Services/ServiceRequestIndex.cs` builds the above structures for lookups and traversals.
+-- **UI:** `Pages/StatusReportPage.xaml` binds to `UserIssue` items and uses search/refresh handlers in `Pages/StatusReportPage.xaml.cs`.
 
 ## Notes
 

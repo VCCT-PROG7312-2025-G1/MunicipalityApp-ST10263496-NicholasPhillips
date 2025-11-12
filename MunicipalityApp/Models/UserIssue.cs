@@ -22,6 +22,9 @@ namespace MunicipalityApp.Models
     // The file path of any media (image, video) attached to the report.
     public string FilePath { get; set; } = string.Empty;
 
+    // The location (neighborhood/city/area) where the issue was reported.
+    public string Location { get; set; } = string.Empty;
+
         public DateTime ReportedDate { get; set; } = DateTime.Now;
 
         // The current status of the issue

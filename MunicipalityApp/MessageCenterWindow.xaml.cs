@@ -26,11 +26,32 @@ namespace MunicipalityApp
         {
             InitializeComponent();
 
+            // Subscribe to notifications from the NotificationManager
+            MunicipalityApp.Services.NotificationManager.MessagePublished += OnMessagePublished;
 
-            // Example messages in the meantime
-            lstMessages.Items.Add("Water outage in Zone A resolved");
-            lstMessages.Items.Add("Road maintenance scheduled for Main Street");
-            lstMessages.Items.Add("Electricity outage expected tomorrow in Sector 3");
+            // Optionally show a short welcome message
+            lstMessages.Items.Add("Message center initialized.");
+        }
+
+        private void OnMessagePublished(string message)
+        {
+            // Ensure we update UI on the dispatcher
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new Action(() => OnMessagePublished(message)));
+                return;
+            }
+
+            lstMessages.Items.Insert(0, message);
+            // Keep list length reasonable
+            while (lstMessages.Items.Count > 200) lstMessages.Items.RemoveAt(lstMessages.Items.Count - 1);
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            // Unsubscribe to avoid leaks
+            try { MunicipalityApp.Services.NotificationManager.MessagePublished -= OnMessagePublished; } catch { }
         }
     }
 }

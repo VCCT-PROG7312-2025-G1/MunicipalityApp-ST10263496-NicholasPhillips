@@ -16,6 +16,7 @@ namespace MunicipalityApp.Services
         private readonly RedBlackTree<string, UserIssue> _rbtByTitle = new();
         private readonly MinHeap<UserIssue> _minHeapByProgress;
         private readonly Graph<string> _categoryGraph = new();
+    private readonly Dictionary<int, string> _categoryNames = new();
 
         private readonly List<UserIssue> _all;
 
@@ -57,7 +58,9 @@ namespace MunicipalityApp.Services
             var indices = new Dictionary<string, int>();
             for (int i = 0; i < categories.Count; i++)
             {
-                indices[categories[i]] = _categoryGraph.AddNode(categories[i]);
+                int nodeId = _categoryGraph.AddNode(categories[i]);
+                indices[categories[i]] = nodeId;
+                _categoryNames[nodeId] = categories[i];
             }
             for (int i = 1; i < categories.Count; i++)
             {
@@ -76,6 +79,15 @@ namespace MunicipalityApp.Services
         public IEnumerable<UserIssue> InOrderByReportedDate()
         {
             return _avlByTimeKey.InOrder();
+        }
+
+        // Returns the distinct, non-empty locations present in the indexed set.
+        public IEnumerable<string> Locations()
+        {
+            return _all.Select(i => i.Location ?? string.Empty)
+                       .Where(s => !string.IsNullOrWhiteSpace(s))
+                       .Distinct(StringComparer.OrdinalIgnoreCase)
+                       .OrderBy(s => s, StringComparer.OrdinalIgnoreCase);
         }
 
 
@@ -115,8 +127,15 @@ namespace MunicipalityApp.Services
         public IEnumerable<(string u, string v, double w)> CategoryMst()
         {
             var edges = _categoryGraph.MinimumSpanningTree();
-            // We don't keep reverse map here, but for demo we return weights only
-            return edges.Select(e => (u: e.U.ToString(), v: e.V.ToString(), w: e.W));
+            // Map node ids back to category names when possible
+            var result = new List<(string u, string v, double w)>();
+            foreach (var e in edges)
+            {
+                var uName = _categoryNames.TryGetValue(e.U, out var un) ? un : e.U.ToString();
+                var vName = _categoryNames.TryGetValue(e.V, out var vn) ? vn : e.V.ToString();
+                result.Add((u: uName, v: vName, w: e.W));
+            }
+            return result;
         }
     }
 }

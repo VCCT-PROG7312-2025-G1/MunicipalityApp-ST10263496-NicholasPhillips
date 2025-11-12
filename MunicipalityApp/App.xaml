@@ -172,6 +172,15 @@
             </Setter>
         </Style>
 
+        <!-- In-card button style: use for buttons placed inside white cards/dialogs so they have readable dark text -->
+        <Style x:Key="InCardButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="MinWidth" Value="80"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <!-- Ensure dark foreground inside cards -->
+            <Setter Property="Foreground" Value="{StaticResource PrimaryDarkTealBrush}"/>
+        </Style>
+
         <!-- ===================================================== -->
         <!--                 SECONDARY / NAV BUTTONS             -->
         <!-- ===================================================== -->

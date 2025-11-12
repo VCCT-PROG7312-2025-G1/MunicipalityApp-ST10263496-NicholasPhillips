@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+// Normalization is centralized in IssueRepository
 
 namespace MunicipalityApp
 {
@@ -28,6 +29,8 @@ namespace MunicipalityApp
             txtTitle.TextChanged += (s, e) => UpdateProgressBar();
             txtDescription.TextChanged += (s, e) => UpdateProgressBar();
             cmbCategory.SelectionChanged += (s, e) => UpdateProgressBar();
+            cmbLocation.SelectionChanged += (s, e) => UpdateProgressBar();
+            cmbLocation.AddHandler(System.Windows.Controls.Primitives.TextBoxBase.TextChangedEvent, new TextChangedEventHandler((s,e) => UpdateProgressBar()));
         }
 
 
@@ -36,13 +39,14 @@ namespace MunicipalityApp
         private void UpdateProgressBar()
         {
             double progress = 0;
-            int totalFields = 4; // Title, Category, Description, File
+            int totalFields = 5; // Title, Category, Description, Location, File
             int completedFields = 0;
 
             // Check each field for completion.
             if (!string.IsNullOrWhiteSpace(txtTitle.Text)) completedFields++;
             if (cmbCategory.SelectedItem != null) completedFields++;
             if (!string.IsNullOrWhiteSpace(txtDescription.Text)) completedFields++;
+            if (!string.IsNullOrWhiteSpace(cmbLocation?.Text)) completedFields++;
             if (!string.IsNullOrWhiteSpace(attachedFilePath)) completedFields++;
 
             progress = (completedFields / (double)totalFields) * 100;
@@ -104,13 +108,14 @@ namespace MunicipalityApp
                 return;
             }
 
-            // Create new issue object.
+            // Create new issue object. Repository will perform canonical normalization.
             var issue = new UserIssue
             {
                 Title = txtTitle.Text,
                 Category = (cmbCategory.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? string.Empty,
                 Description = txtDescription.Text,
                 FilePath = attachedFilePath,
+                Location = cmbLocation?.Text ?? string.Empty,
                 Status = "Pending"
             };
 

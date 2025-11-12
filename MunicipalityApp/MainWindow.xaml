@@ -54,6 +54,7 @@
             <Button Content="Announcements"
                 Style="{DynamicResource ModernNavButtonStyle}"
                 Click="btnAnnouncements_Click"/>
+            <!-- Notifications tab removed per request -->
             <Button Content="Status Report"
                 Style="{DynamicResource ModernNavButtonStyle}"
                 Click="btnStatusReport_Click"/>
@@ -64,17 +65,39 @@
             </Grid>
         </Border>
 
-        <!-- Main Content -->
+        <!-- Main Content (home content merged from MainHomeWindow.xaml) -->
         <Grid Grid.Row="1" Background="#F6F7F9">
             <Border CornerRadius="18"
                     Margin="24"
-                    Padding="12"
+                    Padding="28"
                     Background="White"
                     Effect="{DynamicResource SubtleShadow}">
-                <Frame x:Name="MainFrame"
-                       NavigationUIVisibility="Hidden"
-                       Source="Pages/MainHomePage.xaml"
-                       Background="Transparent"/>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <Grid>
+                        <Border Style="{StaticResource CenteredPageContainer}">
+                            <Border Style="{StaticResource MainCard}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="Welcome to" Style="{StaticResource SubtitleText}"/>
+                                    <TextBlock Grid.Row="1" Text="Municipality Issue Reporter" Foreground="{StaticResource PrimaryDarkTealBrush}" Style="{StaticResource TitleText}" Margin="0,4,0,0"/>
+                                    <TextBlock Grid.Row="2" Text="South African Municipal Services" Style="{StaticResource SubtitleText}" Margin="0,8,0,16"/>
+
+                                    <StackPanel Grid.Row="3" HorizontalAlignment="Center">
+                                        <TextBlock Text="Please use the navigation bar in the main window to get started." Style="{StaticResource BodyText}" Foreground="{StaticResource NeutralMutedBrush}" TextAlignment="Center"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Border>
+                    </Grid>
+                </ScrollViewer>
+
             </Border>
         </Grid>
     </Grid>

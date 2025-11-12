@@ -6,50 +6,14 @@ namespace MunicipalityApp.Services
     // provides helper methods to show it and navigate to other windows.
     public static class NavigationManager
     {
-        private static MainWindow? _mainWindow;
+        // Backing implementation so callers can continue to use the existing static API.
+        private static readonly INavigationService _impl = new NavigationService();
 
-        public static void RegisterMainWindow(MainWindow main)
-        {
-            _mainWindow = main;
-        }
+        // Expose the concrete instance as well in case advanced callers want to use DI or mocking later.
+        public static INavigationService Instance => _impl;
 
-        public static void ShowMainWindow()
-        {
-            if (_mainWindow == null)
-            {
-                // create and register a new main window if none exists
-                _mainWindow = new MainWindow();
-                _mainWindow.Show();
-                _mainWindow.Activate();
-                return;
-            }
-
-            if (!_mainWindow.IsVisible)
-                _mainWindow.Show();
-
-            _mainWindow.Activate();
-        }
-
-        // Navigate from the main window to another window. The main window will be hidden.
-        // The target window will restore the main window when it closes.
-        public static void NavigateTo(Window target)
-        {
-            if (_mainWindow != null)
-            {
-                _mainWindow.Hide();
-            }
-
-            // When target closes, ensure main is shown again.
-            target.Closed += (s, e) =>
-            {
-                if (_mainWindow != null)
-                {
-                    _mainWindow.Show();
-                    _mainWindow.Activate();
-                }
-            };
-
-            target.Show();
-        }
+        public static void RegisterMainWindow(MainWindow main) => _impl.RegisterMainWindow(main);
+        public static void ShowMainWindow() => _impl.ShowMainWindow();
+        public static void NavigateTo(Window target) => _impl.NavigateTo(target);
     }
 }

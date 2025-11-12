@@ -22,19 +22,19 @@
         <!-- Main Card -->
     <Border CornerRadius="18"
         Background="White"
-        Padding="40"
-        Width="820"
-        MinWidth="720"
+        Padding="32"
+        Width="760"
+        MinWidth="680"
         HorizontalAlignment="Center"
         VerticalAlignment="Center"
         Effect="{DynamicResource DropShadow}">
             
             <StackPanel>
                 <!-- Header -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
-                    <Image Source="/SA-coat-of-arms.png" Width="70" Height="45" Margin="0,0,12,0"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,16">
+                    <Image Source="/SA-coat-of-arms.png" Width="60" Height="40" Margin="0,0,10,0"/>
                     <TextBlock Text="Report an Issue"
-                               FontSize="28"
+                               FontSize="26"
                                FontWeight="Bold"
                                Foreground="{StaticResource PrimaryDarkTealBrush}"
                                VerticalAlignment="Center"/>
@@ -42,11 +42,11 @@
 
                 <!-- Progress -->
                 <ProgressBar x:Name="progressBar"
-                             Height="10"
+                             Height="8"
                              Minimum="0"
                              Maximum="100"
                              Value="0"
-                             Margin="0,0,0,25"
+                             Margin="0,0,0,20"
                              Foreground="{StaticResource AccentYellowBrush}"
                              Background="#1A000000"
                              BorderThickness="0"/>
@@ -58,8 +58,8 @@
                            Margin="0,10,0,5"
                            Foreground="{StaticResource PrimaryDarkTealBrush}"/>
                 <TextBox x:Name="txtTitle"
-                         Height="42"
-                         Margin="0,0,0,15"
+                         Height="38"
+                         Margin="0,0,0,12"
                          Padding="10,5"
                          FontSize="14"
                          Style="{StaticResource TextBoxStyle}"
@@ -72,8 +72,8 @@
                            Margin="0,5,0,5"
                            Foreground="{StaticResource PrimaryDarkTealBrush}"/>
                 <ComboBox x:Name="cmbCategory"
-                          Height="42"
-                          Margin="0,0,0,15"
+                          Height="38"
+                          Margin="0,0,0,12"
                           Padding="10,5"
                           FontSize="14"
                           Style="{StaticResource ComboBoxStyle}">
@@ -81,6 +81,26 @@
                     <ComboBoxItem Content="Water"/>
                     <ComboBoxItem Content="Roads"/>
                     <ComboBoxItem Content="Waste"/>
+                </ComboBox>
+
+                <!-- Location -->
+                <TextBlock Text="Location"
+                           FontWeight="SemiBold"
+                           FontSize="14"
+                           Margin="0,5,0,5"
+                           Foreground="{StaticResource PrimaryDarkTealBrush}"/>
+                <ComboBox x:Name="cmbLocation"
+                          Height="38"
+                          Margin="0,0,0,12"
+                          Padding="10,5"
+                          FontSize="14"
+                          IsEditable="True"
+                          Style="{StaticResource ComboBoxStyle}">
+                    <ComboBoxItem Content="Cape Town"/>
+                    <ComboBoxItem Content="Durban"/>
+                    <ComboBoxItem Content="Johannesburg"/>
+                    <ComboBoxItem Content="Pretoria"/>
+                    <ComboBoxItem Content="Port Elizabeth"/>
                 </ComboBox>
 
                 <!-- Description -->
@@ -91,21 +111,21 @@
                            Foreground="{StaticResource PrimaryDarkTealBrush}"/>
                 <TextBox x:Name="txtDescription"
                          AcceptsReturn="True"
-                         Height="90"
+                         Height="80"
                          TextWrapping="Wrap"
                          FontSize="14"
                          Padding="10"
-                         Margin="0,0,0,20"
+                         Margin="0,0,0,16"
                          Style="{StaticResource TextBoxStyle}"
                          Tag="Enter detailed description"/>
 
                 <!-- File Attach -->
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,10">
-                    <Button Content="Attach Media"
-                            Style="{StaticResource AccentButton}"
-                            Width="140"
-                            Height="36"
-                            Click="btnAttachMedia_Click"/>
+            <Button Content="Attach Media"
+                Style="{StaticResource InCardButton}"
+                Width="130"
+                Height="34"
+                Click="btnAttachMedia_Click"/>
                     <TextBlock x:Name="lblFilePath"
                                Text="No file selected."
                                Margin="12,8,0,0"
@@ -116,21 +136,21 @@
                 <Separator Margin="0,10,0,20" Opacity="0.2"/>
 
                 <!-- Submit Button -->
-                <Button Content="Submit Report"
-                        Style="{StaticResource PrimaryButton}"
-                        Height="42"
-                        FontSize="16"
-                        Margin="0,0,0,15"
-                        Click="btnSubmit_Click"/>
+        <Button Content="Submit Report"
+            Style="{StaticResource PrimaryButton}"
+            Height="40"
+            FontSize="15"
+            Margin="0,0,0,12"
+            Click="btnSubmit_Click"/>
 
                 <!-- Back Button -->
-                <Button Content="Back to Main Menu"
-                        Background="Transparent"
-                        BorderBrush="{StaticResource PrimaryDarkTealBrush}"
-                        Foreground="{StaticResource PrimaryDarkTealBrush}"
-                        FontSize="14"
-                        Height="40"
-                        Click="btnBack_Click">
+        <Button Content="Back to Main Menu"
+            Background="Transparent"
+            BorderBrush="{StaticResource PrimaryDarkTealBrush}"
+            Foreground="{StaticResource PrimaryDarkTealBrush}"
+            FontSize="14"
+            Height="38"
+            Click="btnBack_Click">
                     <Button.Effect>
                         <DropShadowEffect BlurRadius="4" ShadowDepth="1" Color="#22000000"/>
                     </Button.Effect>
